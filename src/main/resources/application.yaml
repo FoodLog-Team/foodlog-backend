@@ -1,3 +1,35 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: FoodLog-backend
+
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/foodlog}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    show-sql: true
+
+    hibernate:
+      ddl-auto: update
+
+  flyway:
+    enabled: false
+
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+
+security:
+  jwt:
+    secret: {JWT_SECRET}
+    expiration: {JWT_EXPIRATION}
