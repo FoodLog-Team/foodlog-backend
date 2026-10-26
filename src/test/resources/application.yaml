@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:17:///foodlog
+    username: test
+    password: test
+
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+
+security:
+  jwt:
+    secret: "test_secret"
+    expiration: 3600000
