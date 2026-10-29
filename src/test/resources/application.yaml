@@ -1,4 +1,7 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
+
   datasource:
     url: jdbc:tc:postgresql:17:///foodlog
     username: test
@@ -9,7 +12,6 @@ spring:
       genai:
         api-key: ${GEMINI_API_KEY}
 
-security:
-  jwt:
-    secret: "test_secret"
-    expiration: 3600000
+jwt:
+  secret: "SN6YWTTwqsScgdWIyqsFa6Lv1t7kmPwkOdRzhuDigC8="
+  expiration: 3600000

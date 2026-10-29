@@ -5,6 +5,9 @@ services:
     image: postgres:17
     restart: unless-stopped
 
+    env_file:
+      - .env
+
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-foodlog}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -27,6 +30,10 @@ services:
     restart: on-failure
     ports:
       - "${SPRING_LOCAL_PORT}:${SPRING_DOCKER_PORT}"
+
+    env_file:
+      - .env
+
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:${POSTGRES_DOCKER_PORT}/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
