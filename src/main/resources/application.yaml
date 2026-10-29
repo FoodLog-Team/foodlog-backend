@@ -1,7 +1,7 @@
 server:
   port: 8080
   servlet:
-    context-path=/api
+    context-path: /api
 
 spring:
   application:
@@ -31,7 +31,6 @@ spring:
       genai:
         api-key: ${GEMINI_API_KEY}
 
-security:
-  jwt:
-    secret: {JWT_SECRET}
-    expiration: {JWT_EXPIRATION}
+jwt:
+  secret: {JWT_SECRET}
+  expiration: {JWT_EXPIRATION}
