@@ -2,7 +2,8 @@ package team.foodlog.backend.dto;
 
 import java.time.Instant;
 
-public record UserResponseDto(
+public record UserRegistrationResponseDto(
+        String token,
         Long id,
         String email,
         Instant createdAt
