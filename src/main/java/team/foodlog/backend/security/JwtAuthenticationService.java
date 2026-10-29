@@ -4,6 +4,7 @@ import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import team.foodlog.backend.dto.UserRegistrationRequestDto;
 import team.foodlog.backend.dto.UserRegistrationResponseDto;
 import org.springframework.transaction.annotation.Transactional;
