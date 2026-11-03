@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -22,20 +22,20 @@ public class RefreshToken {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private String hashedToken;
+    @Column(nullable = false, unique = true)
+    private String hash;
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime expiresAt;
+    private Instant expiresAt;
 
     @Column
-    private LocalDateTime revokedAt;
+    private Instant revokedAt;
 
 }
