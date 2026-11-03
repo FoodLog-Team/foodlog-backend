@@ -21,7 +21,7 @@ public class NimbusJwtService implements JwtService {
     private final JwtProperties jwtProperties;
 
     @Override
-    public String generateAccessToken(Long userId, String email) {
+    public String generateAccessToken(Long userId) {
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -29,7 +29,6 @@ public class NimbusJwtService implements JwtService {
                 .subject(userId.toString())
                 .issuedAt(now)
                 .expiresAt(now.plusMillis(jwtProperties.expiration()))
-                .claim("email", email)
                 .build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
