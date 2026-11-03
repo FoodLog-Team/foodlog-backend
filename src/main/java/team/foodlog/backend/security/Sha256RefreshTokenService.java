@@ -8,7 +8,6 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.HexFormat;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.Flyway;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.foodlog.backend.dto.RefreshTokenDto;
