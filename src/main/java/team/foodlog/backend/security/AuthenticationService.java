@@ -1,10 +1,18 @@
 package team.foodlog.backend.security;
 
+import team.foodlog.backend.dto.UserLoginRequestDto;
 import team.foodlog.backend.dto.UserRegistrationRequestDto;
-import team.foodlog.backend.dto.UserRegistrationResponseDto;
 
-public interface AuthenticationService {
+public interface AuthenticationService<T> {
 
-    UserRegistrationResponseDto register(UserRegistrationRequestDto requestDto);
+    T register(UserRegistrationRequestDto requestDto);
+
+    T login(UserLoginRequestDto requestDto);
+
+    T refresh(String token);
+
+    void logout(String token);
+
+    void logoutAll();
 
 }

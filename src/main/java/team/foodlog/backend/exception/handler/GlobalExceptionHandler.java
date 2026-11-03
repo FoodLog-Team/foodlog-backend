@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import team.foodlog.backend.exception.EmailAlreadyInUseException;
+import team.foodlog.backend.exception.RefreshTokenExpiredException;
+import team.foodlog.backend.exception.RefreshTokenNotFoundException;
+import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
 
 @RestControllerAdvice
 @Slf4j
@@ -32,14 +35,55 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             EmailAlreadyInUseException e, HttpServletRequest request
     ) {
 
-        log.warn("Registration failed: method={}, uri={}, exception={}",
-                request.getMethod(),
-                request.getRequestURI(),
-                e.getClass().getSimpleName(),
-                e
-        );
+        logWarn("Registration failed", request, e);
 
         return buildResponse(HttpStatus.CONFLICT, "This email is already in use");
+    }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenNotFound(
+            RefreshTokenNotFoundException e, HttpServletRequest request
+    ) {
+        String message = "Refresh token was not found";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.NOT_FOUND, message);
+    }
+
+    @ExceptionHandler(RefreshTokenExpiredException.class)
+    public ResponseEntity<ErrorResponse> handleRefreshTokenExpired(
+            RefreshTokenExpiredException e, HttpServletRequest request
+    ) {
+        String message = "Refresh token is expired";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.UNAUTHORIZED, message);
+    }
+
+    @ExceptionHandler(RevokedRefreshTokenUsageException.class)
+    public ResponseEntity<ErrorResponse> handleRevokedRefreshTokenUsage(
+            RevokedRefreshTokenUsageException e, HttpServletRequest request
+    ) {
+        log.warn(
+                """
+                SECURITY EVENT: Revoked refresh token reuse.
+                User ID: {}
+                Refresh Token ID: {}
+                Client IP: {}
+                User Agent: {}
+                Origin: {}
+                Request URI: {}
+                """,
+                e.getUserId(),
+                e.getRefreshTokenId(),
+                request.getRemoteAddr(),
+                request.getHeader("User-Agent"),
+                request.getHeader("Origin"),
+                request.getRequestURI()
+        );
+
+        return buildResponse(HttpStatus.UNAUTHORIZED,
+                "Revoked refresh token reuse detected");
     }
 
     @Override
@@ -104,6 +148,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                     message,
                     Instant.now()
             ));
+    }
+
+    private void logWarn(String message, HttpServletRequest request, Exception e) {
+        log.warn("{}: method={}, uri={}, exception={}",
+                message,
+                request.getMethod(),
+                request.getRequestURI(),
+                e.getClass().getSimpleName(),
+                e
+        );
     }
 
 }
