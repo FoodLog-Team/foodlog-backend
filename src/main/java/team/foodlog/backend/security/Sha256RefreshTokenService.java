@@ -89,12 +89,6 @@ public class Sha256RefreshTokenService implements RefreshTokenService<String, Re
     private String create0(Long userId) {
         String opaqueToken = generateOpaqueToken();
 
-        System.out.println("5984 " + refreshTokenProperties.maxAmount());
-        System.out.println("5984 " + refreshTokenProperties.expiration());
-        System.out.println("5984 " + refreshTokenProperties.cookies().path());
-        System.out.println("5984 " + refreshTokenProperties.cookies().sameSite());
-        System.out.println("5984 " + refreshTokenProperties.cookies().maxAge());
-
         RefreshToken refreshToken = new RefreshToken()
                 .setUserId(userId)
                 .setHash(hashOpaqueToken(opaqueToken))
