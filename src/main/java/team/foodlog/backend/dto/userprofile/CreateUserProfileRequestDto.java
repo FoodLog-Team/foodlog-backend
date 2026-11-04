@@ -3,6 +3,8 @@ package team.foodlog.backend.dto.userprofile;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import team.foodlog.backend.dto.annotation.Adult;
 import team.foodlog.backend.model.enums.ActivityLevel;
 import team.foodlog.backend.model.enums.Sex;
 import team.foodlog.backend.model.enums.WeightGoal;
@@ -10,9 +12,8 @@ import team.foodlog.backend.model.enums.WeightGoal;
 public record CreateUserProfileRequestDto(
 
             @NotNull
-            @Min(18)
-            @Max(100)
-            Integer age,
+            @Adult
+            LocalDate age,
 
             @NotNull
             @Min(120)

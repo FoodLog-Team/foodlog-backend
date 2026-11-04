@@ -42,11 +42,10 @@ public class JwtAuthenticationService implements AuthenticationService<TokenPair
             throw new EmailAlreadyInUseException("Account with this email is already registered");
         }
 
-        User user = new User();
-
-        user.setEmail(email);
-
-        user.setPassword(passwordEncoder.encode(requestDto.password()));
+        User user = new User(
+                email,
+                passwordEncoder.encode(requestDto.password())
+        );
 
         userRepository.saveAndFlush(user);
 
