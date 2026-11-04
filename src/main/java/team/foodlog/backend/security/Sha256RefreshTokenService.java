@@ -10,7 +10,7 @@ import java.util.HexFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.foodlog.backend.dto.RefreshTokenDto;
+import team.foodlog.backend.dto.auth.token.RefreshTokenDto;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;

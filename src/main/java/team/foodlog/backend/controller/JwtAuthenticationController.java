@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import team.foodlog.backend.dto.AccessTokenDto;
-import team.foodlog.backend.dto.TokenPairDto;
-import team.foodlog.backend.dto.UserLoginRequestDto;
-import team.foodlog.backend.dto.UserRegistrationRequestDto;
+import team.foodlog.backend.dto.auth.login.UserLoginRequestDto;
+import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;
+import team.foodlog.backend.dto.auth.token.AccessTokenDto;
+import team.foodlog.backend.dto.auth.token.TokenPairDto;
 import team.foodlog.backend.security.AuthenticationService;
 import team.foodlog.backend.security.RefreshTokenCookieFactory;
 
