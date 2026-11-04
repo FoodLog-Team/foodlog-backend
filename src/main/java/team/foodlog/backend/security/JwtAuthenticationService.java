@@ -13,7 +13,7 @@ import team.foodlog.backend.dto.auth.login.UserLoginRequestDto;
 import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;
 import team.foodlog.backend.dto.auth.token.RefreshTokenDto;
 import team.foodlog.backend.dto.auth.token.TokenPairDto;
-import team.foodlog.backend.exception.EmailAlreadyInUseException;
+import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.model.User;
 import team.foodlog.backend.repository.UserRepository;
 
@@ -39,7 +39,8 @@ public class JwtAuthenticationService implements AuthenticationService<TokenPair
         String email = normalizeEmail(requestDto.email());
 
         if (userRepository.existsByEmail(email)) {
-            throw new EmailAlreadyInUseException("Account with this email is already registered");
+            throw new EmailAlreadyRegisteredException(
+                    "Account with this email is already registered");
         }
 
         User user = new User(

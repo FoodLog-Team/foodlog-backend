@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import team.foodlog.backend.exception.EmailAlreadyInUseException;
+import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
@@ -30,9 +30,9 @@ import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(EmailAlreadyInUseException.class)
+    @ExceptionHandler(EmailAlreadyRegisteredException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyInUse(
-            EmailAlreadyInUseException e, HttpServletRequest request
+            EmailAlreadyRegisteredException e, HttpServletRequest request
     ) {
 
         logWarn("Registration failed", request, e);
