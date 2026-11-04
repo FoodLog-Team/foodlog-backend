@@ -49,13 +49,13 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
             SELECT rt FROM RefreshToken rt
-            WHERE rt.hash = :hash
+            WHERE rt.tokenHash = :hash
             """)
     Optional<RefreshToken> findByHashForUpdate(String hash);
 
     @Query("""
             SELECT rt.userId FROM RefreshToken rt
-            WHERE rt.hash = :hash
+            WHERE rt.tokenHash = :hash
             """)
     Optional<Long> findUserIdByHash(String hash);
 
