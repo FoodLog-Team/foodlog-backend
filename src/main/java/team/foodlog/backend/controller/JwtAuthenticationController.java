@@ -28,6 +28,7 @@ public class JwtAuthenticationController implements AuthenticationController<Acc
 
     private final RefreshTokenCookieFactory cookieFactory;
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<AccessTokenDto> register(
             @Valid @RequestBody UserRegistrationRequestDto requestDto,
@@ -41,8 +42,8 @@ public class JwtAuthenticationController implements AuthenticationController<Acc
             .body(new AccessTokenDto(tokenPair.accessToken()));
     }
 
-    @PostMapping("/login")
     @Override
+    @PostMapping("/login")
     public ResponseEntity<AccessTokenDto> login(
             @Valid @RequestBody UserLoginRequestDto requestDto,
             HttpServletResponse response) {
@@ -77,8 +78,8 @@ public class JwtAuthenticationController implements AuthenticationController<Acc
         );
     }
 
-    @PostMapping("/logout")
     @Override
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(
             @CookieValue(
                 name = RefreshTokenCookieFactory.COOKIE_NAME,
@@ -95,8 +96,8 @@ public class JwtAuthenticationController implements AuthenticationController<Acc
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/logout-all")
     @Override
+    @PostMapping("/logout-all")
     public ResponseEntity<Void> logoutAll(HttpServletResponse response) {
         this.clearCookieHeader(response);
 
