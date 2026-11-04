@@ -1,7 +1,7 @@
 package team.foodlog.backend.security;
 
-import team.foodlog.backend.dto.UserLoginRequestDto;
-import team.foodlog.backend.dto.UserRegistrationRequestDto;
+import team.foodlog.backend.dto.auth.login.UserLoginRequestDto;
+import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;
 
 public interface AuthenticationService<T> {
 
