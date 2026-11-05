@@ -11,7 +11,7 @@ import team.foodlog.backend.exception.UserProfileAlreadyCreatedException;
 import team.foodlog.backend.mapper.UserProfileMapper;
 import team.foodlog.backend.model.UserProfile;
 import team.foodlog.backend.repository.UserProfileRepository;
-import team.foodlog.backend.security.AuthenticatedUserIdProvider;
+import team.foodlog.backend.security.common.AuthenticatedUserIdProvider;
 
 @Service
 @RequiredArgsConstructor

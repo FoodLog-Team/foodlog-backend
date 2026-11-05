@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.common;
 
 import team.foodlog.backend.dto.auth.login.UserLoginRequestDto;
 import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;

@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.jwt;
 
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;

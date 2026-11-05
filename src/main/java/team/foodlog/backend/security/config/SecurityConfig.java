@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import java.util.Base64;

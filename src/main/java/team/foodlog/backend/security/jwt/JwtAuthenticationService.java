@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.jwt;
 
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,9 @@ import team.foodlog.backend.dto.auth.token.TokenPairDto;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.model.User;
 import team.foodlog.backend.repository.UserRepository;
+import team.foodlog.backend.security.common.AuthenticatedUserIdProvider;
+import team.foodlog.backend.security.common.AuthenticationService;
+import team.foodlog.backend.security.refresh.RefreshTokenService;
 
 @Service
 @RequiredArgsConstructor
