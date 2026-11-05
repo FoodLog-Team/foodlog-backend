@@ -7,9 +7,6 @@ spring:
   application:
     name: FoodLog-backend
 
-  config:
-    import: optional:file:.env[.properties]
-
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/foodlog}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
@@ -38,11 +35,11 @@ jwt:
 
 security:
   refresh-token:
-    expiration: ${REFRESH_TOKEN_EXPIRATION_IN_DAYS:31}
+    expiration: ${REFRESH_TOKEN_EXPIRATION}
     max-amount: ${REFRESH_TOKEN_MAX_AMOUNT}
 
     cookies:
       path: ${REFRESH_TOKEN_COOKIE_PATH}
       same-site: Strict
       secure: ${REFRESH_TOKEN_COOKIE_SECURE:true}
-      max-age: ${REFRESH_TOKEN_MAX_AGE_IN_DAYS}
+      max-age: ${REFRESH_TOKEN_MAX_AGE}

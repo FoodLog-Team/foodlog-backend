@@ -1,4 +1,4 @@
-package team.foodlog.backend.dto;
+package team.foodlog.backend.dto.auth.register;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

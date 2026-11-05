@@ -10,7 +10,7 @@ import java.util.HexFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import team.foodlog.backend.dto.RefreshTokenDto;
+import team.foodlog.backend.dto.auth.token.RefreshTokenDto;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
@@ -89,13 +89,11 @@ public class Sha256RefreshTokenService implements RefreshTokenService<String, Re
     private String create0(Long userId) {
         String opaqueToken = generateOpaqueToken();
 
-        RefreshToken refreshToken = new RefreshToken()
-                .setUserId(userId)
-                .setHash(hashOpaqueToken(opaqueToken))
-                .setExpiresAt(
-                    Instant.now(clock)
-                        .plus(refreshTokenProperties.expiration())
-            );
+        RefreshToken refreshToken = new RefreshToken(
+                userId,
+                hashOpaqueToken(opaqueToken),
+                Instant.now(clock).plus(refreshTokenProperties.expiration())
+        );
 
         refreshTokenRepository.save(refreshToken);
 
