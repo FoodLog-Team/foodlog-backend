@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
-import team.foodlog.backend.dto.annotation.Adult;
+import team.foodlog.backend.dto.auth.Adult;
 import team.foodlog.backend.model.enums.ActivityLevel;
 import team.foodlog.backend.model.enums.Sex;
 import team.foodlog.backend.model.enums.WeightGoal;
