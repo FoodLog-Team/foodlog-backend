@@ -7,8 +7,10 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
+import org.springframework.validation.annotation.Validated;
 
 @ConfigurationProperties(prefix = "security.refresh-token")
+@Validated
 public record RefreshTokenProperties(
 
         @NotNull
@@ -29,7 +31,8 @@ public record RefreshTokenProperties(
             @NotBlank
             String sameSite,
 
-            boolean secure,
+            @NotNull
+            Boolean secure,
 
             @NotNull
             @DurationUnit(ChronoUnit.DAYS)

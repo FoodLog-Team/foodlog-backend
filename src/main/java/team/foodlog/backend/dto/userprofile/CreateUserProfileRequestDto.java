@@ -13,7 +13,7 @@ public record CreateUserProfileRequestDto(
 
             @NotNull
             @Adult
-            LocalDate age,
+            LocalDate dateOfBirth,
 
             @NotNull
             @Min(120)

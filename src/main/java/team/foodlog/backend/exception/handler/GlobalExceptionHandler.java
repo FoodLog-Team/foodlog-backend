@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,16 +24,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
+import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
+import team.foodlog.backend.exception.UserProfileAlreadyCreatedException;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyRegisteredException.class)
-    public ResponseEntity<ErrorResponse> handleEmailAlreadyInUse(
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyRegistered(
             EmailAlreadyRegisteredException e, HttpServletRequest request
     ) {
 
@@ -86,6 +90,46 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "Revoked refresh token reuse detected");
     }
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEntityNotFound(
+            EntityNotFoundException e, HttpServletRequest request
+    ) {
+        String message = "Entity was not found";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.NOT_FOUND, message);
+    }
+
+    @ExceptionHandler(UserProfileAlreadyCreatedException.class)
+    public ResponseEntity<ErrorResponse> handleUserProfileAlreadyCreated(
+            UserProfileAlreadyCreatedException e, HttpServletRequest request
+    ) {
+        String message = "User profile is already created";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.CONFLICT, message);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(
+            BadCredentialsException e, HttpServletRequest request
+    ) {
+        String message = "Invalid email or password";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.UNAUTHORIZED, message);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameNotFound(
+            UsernameNotFoundException e, HttpServletRequest request
+    ) {
+        String message = "Wrong email or password";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.UNAUTHORIZED, message);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e,
@@ -130,7 +174,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 e.getClass().getSimpleName(),
                 request.getMethod(),
                 request.getRequestURI(),
-                e
+                e.getCause()
         );
 
         return buildResponse(

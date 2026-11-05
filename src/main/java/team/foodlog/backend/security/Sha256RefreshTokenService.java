@@ -91,7 +91,7 @@ public class Sha256RefreshTokenService implements RefreshTokenService<String, Re
 
         RefreshToken refreshToken = new RefreshToken(
                 userId,
-                hashOpaqueToken(hashOpaqueToken(opaqueToken)),
+                hashOpaqueToken(opaqueToken),
                 Instant.now(clock).plus(refreshTokenProperties.expiration())
         );
 

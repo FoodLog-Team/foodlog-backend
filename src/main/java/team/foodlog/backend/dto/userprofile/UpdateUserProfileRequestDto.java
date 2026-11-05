@@ -14,7 +14,7 @@ import team.foodlog.backend.model.enums.WeightGoal;
 public record UpdateUserProfileRequestDto(
 
         @Adult
-        LocalDate age,
+        LocalDate dateOfBirth,
 
         @Min(120)
         @Max(230)
