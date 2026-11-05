@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.refresh;
 
 public interface RefreshTokenService<T, R> {
 

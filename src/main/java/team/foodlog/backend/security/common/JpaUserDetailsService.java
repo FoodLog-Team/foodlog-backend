@@ -1,4 +1,4 @@
-package team.foodlog.backend.security;
+package team.foodlog.backend.security.common;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
