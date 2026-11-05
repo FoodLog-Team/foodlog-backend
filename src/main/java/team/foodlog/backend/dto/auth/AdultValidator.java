@@ -1,4 +1,4 @@
-package team.foodlog.backend.dto.annotation.validator;
+package team.foodlog.backend.dto.auth;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -6,7 +6,6 @@ import java.time.Clock;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import team.foodlog.backend.dto.annotation.Adult;
 
 @Component
 @RequiredArgsConstructor

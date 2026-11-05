@@ -1,4 +1,4 @@
-package team.foodlog.backend.service;
+package team.foodlog.backend.service.userprofile;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

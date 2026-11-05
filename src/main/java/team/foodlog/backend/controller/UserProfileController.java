@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.foodlog.backend.dto.userprofile.CreateUserProfileRequestDto;
 import team.foodlog.backend.dto.userprofile.UpdateUserProfileRequestDto;
 import team.foodlog.backend.dto.userprofile.UserProfileResponseDto;
-import team.foodlog.backend.service.UserProfileService;
+import team.foodlog.backend.service.userprofile.UserProfileService;
 
 @RestController
 @RequestMapping("/profile")
