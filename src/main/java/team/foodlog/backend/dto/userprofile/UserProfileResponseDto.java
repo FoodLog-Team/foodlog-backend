@@ -5,7 +5,7 @@ import team.foodlog.backend.model.enums.Sex;
 import team.foodlog.backend.model.enums.WeightGoal;
 
 public record UserProfileResponseDto(
-        Long id,
+        Long userId,
         Integer height,
         Integer weight,
         Sex sex,
