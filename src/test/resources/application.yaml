@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
 
   datasource:
     url: jdbc:tc:postgresql:17:///foodlog
@@ -10,19 +8,19 @@ spring:
   ai:
     google:
       genai:
-        api-key: ${GEMINI_API_KEY}
+        api-key: test
 
 jwt:
-  secret: "SN6YWTTwqsScgdWIyqsFa6Lv1t7kmPwkOdRzhuDigC8="
+  secret: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
   expiration: 3600000
 
 security:
   refresh-token:
-    expiration: ${REFRESH_TOKEN_EXPIRATION_IN_DAYS:30}
-    max-amount: ${REFRESH_TOKEN_MAX_AMOUNT}
+    expiration: 1h
+    max-amount: 3
 
     cookies:
-      path: ${REFRESH_TOKEN_COOKIE_PATH}
+      path: /api/auth
       same-site: Strict
-      secure: ${REFRESH_TOKEN_COOKIE_SECURE:true}
-      max-age: ${REFRESH_TOKEN_MAX_AGE_IN_DAYS}
+      secure: false
+      max-age: 1h
