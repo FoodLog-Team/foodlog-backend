@@ -11,7 +11,7 @@ import team.foodlog.backend.exception.UserProfileAlreadyCreatedException;
 import team.foodlog.backend.mapper.UserProfileMapper;
 import team.foodlog.backend.model.UserProfile;
 import team.foodlog.backend.repository.UserProfileRepository;
-import team.foodlog.backend.security.common.AuthenticatedUserIdProvider;
+import team.foodlog.backend.security.common.AuthenticatedUserIdSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +21,11 @@ public class UserProfileService {
 
     private final UserProfileMapper userProfileMapper;
 
-    private final AuthenticatedUserIdProvider<Long> userIdProvider;
+    private final AuthenticatedUserIdSupplier<Long> userIdSupplier;
 
     @Transactional
     public UserProfileResponseDto create(CreateUserProfileRequestDto requestDto) {
-        Long userId = userIdProvider.provide();
+        Long userId = userIdSupplier.get();
 
         if (userProfileRepository.existsById(userId)) {
             throw new UserProfileAlreadyCreatedException("Profile is already created");
@@ -42,7 +42,7 @@ public class UserProfileService {
     @Transactional
     public UserProfileResponseDto update(UpdateUserProfileRequestDto requestDto) {
         UserProfile userProfile = userProfileRepository
-                .findById(userIdProvider.provide())
+                .findById(userIdSupplier.get())
                 .orElseThrow(
                         () -> new EntityNotFoundException(
                             "User profile was not found")
