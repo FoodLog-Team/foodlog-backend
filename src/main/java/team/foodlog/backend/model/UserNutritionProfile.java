@@ -27,8 +27,8 @@ import team.foodlog.backend.model.enums.WeightGoal;
 @Setter
 @RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user_profiles")
-public class UserProfile {
+@Table(name = "user_nutrition_profiles")
+public class UserNutritionProfile {
 
     @Id
     @Column(name = "user_id")

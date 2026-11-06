@@ -28,7 +28,7 @@ import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
-import team.foodlog.backend.exception.UserProfileAlreadyCreatedException;
+import team.foodlog.backend.exception.UserNutritionProfileAlreadyCreatedException;
 
 @RestControllerAdvice
 @Slf4j
@@ -100,11 +100,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, message);
     }
 
-    @ExceptionHandler(UserProfileAlreadyCreatedException.class)
-    public ResponseEntity<ErrorResponse> handleUserProfileAlreadyCreated(
-            UserProfileAlreadyCreatedException e, HttpServletRequest request
+    @ExceptionHandler(UserNutritionProfileAlreadyCreatedException.class)
+    public ResponseEntity<ErrorResponse> handleUserNutritionProfileAlreadyCreated(
+            UserNutritionProfileAlreadyCreatedException e, HttpServletRequest request
     ) {
-        String message = "User profile is already created";
+        String message = "User nutrition profile is already created";
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.CONFLICT, message);
