@@ -6,12 +6,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
-import team.foodlog.backend.security.common.AuthenticatedUserIdProvider;
+import team.foodlog.backend.security.common.AuthenticatedUserIdSupplier;
 
 @Component
-public class JwtAuthenticatedUserIdProvider implements AuthenticatedUserIdProvider<Long> {
+public class JwtAuthenticatedUserIdSupplier implements AuthenticatedUserIdSupplier<Long> {
 
-    public Long provide() {
+    public Long get() {
         Authentication authentication = SecurityContextHolder
                 .getContext()
                 .getAuthentication();

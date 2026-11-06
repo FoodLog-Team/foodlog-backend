@@ -1,8 +1,10 @@
 package team.foodlog.backend.security.common;
 
-@FunctionalInterface
-public interface AuthenticatedUserIdProvider<T> {
+import java.util.function.Supplier;
 
-    T provide();
+@FunctionalInterface
+public interface AuthenticatedUserIdSupplier<T> extends Supplier<T> {
+
+    T get();
 
 }
