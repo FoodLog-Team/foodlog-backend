@@ -1,5 +1,6 @@
 package team.foodlog.backend.model.enums;
 
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,16 +8,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityLevel {
 
-    SEDENTARY(1.2),
+    SEDENTARY(BigDecimal.valueOf(1.2)),
 
-    LIGHTLY_ACTIVE(1.375),
+    LIGHTLY_ACTIVE(BigDecimal.valueOf(1.375)),
 
-    MODERATELY_ACTIVE(1.55),
+    MODERATELY_ACTIVE(BigDecimal.valueOf(1.55)),
 
-    VERY_ACTIVE(1.725),
+    VERY_ACTIVE(BigDecimal.valueOf(1.725)),
 
-    EXTRA_ACTIVE(1.9);
+    EXTRA_ACTIVE(BigDecimal.valueOf(1.9));
 
-    private final double activityMultiplier;
+    private final BigDecimal activityLevelMultiplier;
 
 }
