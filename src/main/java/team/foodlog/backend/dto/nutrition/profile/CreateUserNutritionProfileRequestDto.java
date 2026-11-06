@@ -1,4 +1,4 @@
-package team.foodlog.backend.dto.userprofile;
+package team.foodlog.backend.dto.nutrition.profile;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -9,7 +9,7 @@ import team.foodlog.backend.model.enums.ActivityLevel;
 import team.foodlog.backend.model.enums.Sex;
 import team.foodlog.backend.model.enums.WeightGoal;
 
-public record CreateUserProfileRequestDto(
+public record CreateUserNutritionProfileRequestDto(
 
             @NotNull
             @Adult

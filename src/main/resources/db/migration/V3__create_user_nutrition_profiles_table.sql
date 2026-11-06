@@ -1,4 +1,4 @@
-CREATE TABLE user_profiles (
+CREATE TABLE user_nutrition_profiles (
     user_id BIGINT PRIMARY KEY,
     date_of_birth DATE NOT NULL,
     height INT NOT NULL,
