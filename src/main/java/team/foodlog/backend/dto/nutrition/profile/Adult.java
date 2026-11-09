@@ -1,4 +1,4 @@
-package team.foodlog.backend.dto.auth;
+package team.foodlog.backend.dto.nutrition.profile;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
