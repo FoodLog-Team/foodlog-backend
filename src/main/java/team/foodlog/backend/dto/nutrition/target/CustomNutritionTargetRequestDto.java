@@ -1,21 +1,22 @@
-package team.foodlog.backend.dto.nutrition;
+package team.foodlog.backend.dto.nutrition.target;
 
 import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import team.foodlog.backend.dto.nutrition.profile.CustomNutritionTargetChecks;
 
 @GroupSequence({
         CustomNutritionTargetRequestDto.class,
-        NutritionValidationGroup.class
+        CustomNutritionTargetChecks.class
 })
-@CaloriesConsistentWithMacros(groups = NutritionValidationGroup.class)
+@KcalConsistentWithMacros(groups = CustomNutritionTargetChecks.class)
 public record CustomNutritionTargetRequestDto(
 
         @NotNull
         @Min(800)
         @Max(8000)
-        Integer calories,
+        Integer kcal,
 
         @NotNull
         @Min(1)
