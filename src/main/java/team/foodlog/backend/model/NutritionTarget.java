@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +31,6 @@ public class NutritionTarget {
     @Setter(AccessLevel.NONE)
     private Long userId;
 
-    @Column(name = "basal_metabolic_rate", nullable = false)
-    private Integer basalMetabolicRate;
-
     @Column(name = "recommended_kcal", nullable = false)
     private Integer recommendedKcal;
 
@@ -47,14 +45,22 @@ public class NutritionTarget {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mode", nullable = false, length = 32)
-    private TargetMode mode;
+    private TargetMode mode = TargetMode.RECOMMENDED;
 
-    private Integer customCalories;
+    @Column(name = "custom_kcal")
+    private Integer customKcal;
 
+    @Column(name = "custom_carbs")
     private Integer customCarbs;
 
+    @Column(name = "custom_protein")
     private Integer customProtein;
 
+    @Column(name = "custom_fats")
     private Integer customFats;
+
+    @Version
+    @Setter(AccessLevel.NONE)
+    private Long version;
 
 }
