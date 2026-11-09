@@ -66,7 +66,7 @@ public class Sha256RefreshTokenService implements RefreshTokenService<String, Re
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = RevokedRefreshTokenUsageException.class)
     public RefreshTokenDto rotate(String token) {
         Long userId = refreshTokenRepository.findUserIdByHash(hashOpaqueToken(token))
                 .orElseThrow(
@@ -74,8 +74,8 @@ public class Sha256RefreshTokenService implements RefreshTokenService<String, Re
                 );
 
         return new RefreshTokenDto(
-                userId,
-                this.rotate0(token, userId)
+            userId,
+            this.rotate0(token, userId)
         );
     }
 
