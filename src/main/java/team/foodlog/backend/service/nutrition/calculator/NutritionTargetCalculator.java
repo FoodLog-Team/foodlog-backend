@@ -1,11 +1,14 @@
 package team.foodlog.backend.service.nutrition.calculator;
 
-import java.util.function.Function;
+import team.foodlog.backend.dto.nutrition.profile.UserNutritionProfileDto;
+import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
+import team.foodlog.backend.service.nutrition.enums.NutritionTargetCalculationType;
 
-@FunctionalInterface
-public interface NutritionTargetCalculator<T extends NutritionTargetCalculationArguments>
-        extends Function<T, Integer> {
+public interface NutritionTargetCalculator {
 
-    Integer apply(T arguments);
+    NutritionTargetCalculationType getType();
+
+    NutritionTargetCalculationResult calculate(
+            UserNutritionProfileDto dto, NutritionFormulaType formulaType);
 
 }
