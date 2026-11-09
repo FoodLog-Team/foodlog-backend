@@ -3,8 +3,8 @@ package team.foodlog.backend.dto.nutrition.profile;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import team.foodlog.backend.dto.auth.Adult;
 import team.foodlog.backend.model.enums.ActivityLevel;
 import team.foodlog.backend.model.enums.Sex;
 import team.foodlog.backend.model.enums.WeightGoal;
@@ -23,7 +23,7 @@ public record CreateUserNutritionProfileRequestDto(
             @NotNull
             @Min(30)
             @Max(300)
-            Integer weight,
+            BigDecimal weight,
 
             @NotNull
             Sex sex,

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.foodlog.backend.dto.nutrition.profile.CreateUserNutritionProfileRequestDto;
 import team.foodlog.backend.dto.nutrition.profile.UpdateUserNutritionProfileRequestDto;
+import team.foodlog.backend.dto.nutrition.profile.UserNutritionProfileDto;
 import team.foodlog.backend.dto.nutrition.profile.UserNutritionProfileResponseDto;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.UserNutritionProfileAlreadyCreatedException;
@@ -37,7 +38,7 @@ public class UserNutritionProfileService {
         );
 
         return userNutritionProfileMapper
-                .toDto(userNutritionProfileRepository.save(userNutritionProfile));
+                .toResponseDto(userNutritionProfileRepository.save(userNutritionProfile));
     }
 
     @Transactional
@@ -51,7 +52,18 @@ public class UserNutritionProfileService {
 
         userNutritionProfileMapper.update(requestDto, userNutritionProfile);
 
-        return userNutritionProfileMapper.toDto(userNutritionProfile);
+        return userNutritionProfileMapper.toResponseDto(userNutritionProfile);
+    }
+
+    @Transactional(readOnly = true)
+    public UserNutritionProfileDto getProfileDto() {
+        return userNutritionProfileMapper.toDto(
+                userNutritionProfileRepository.findById(userIdSupplier.get())
+                        .orElseThrow(
+                                () -> new IllegalStateException(
+                                        "User nutrition profile was not created yet")
+                        )
+        );
     }
 
 }
