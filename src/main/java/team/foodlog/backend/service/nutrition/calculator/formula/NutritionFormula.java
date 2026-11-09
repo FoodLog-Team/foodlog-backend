@@ -1,12 +1,12 @@
 package team.foodlog.backend.service.nutrition.calculator.formula;
 
-import java.util.function.Function;
+import team.foodlog.backend.dto.nutrition.profile.UserNutritionProfileDto;
+import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
 
-@FunctionalInterface
-public interface NutritionFormula<T extends NutritionFormulaArguments> extends
-        Function<T, Integer> {
+public interface NutritionFormula {
 
-    @Override
-    Integer apply(T t);
+    NutritionFormulaType getType();
+
+    Integer calculate(UserNutritionProfileDto dto);
 
 }
