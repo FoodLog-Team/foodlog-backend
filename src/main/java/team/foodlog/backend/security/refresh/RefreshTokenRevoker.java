@@ -4,7 +4,6 @@ import java.time.Clock;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import team.foodlog.backend.repository.RefreshTokenRepository;
 
@@ -16,7 +15,7 @@ public class RefreshTokenRevoker {
 
     private final Clock clock;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     void revokeAll(Long userId) {
         refreshTokenRepository.findAllNotRevokedTokensByUserId(userId)
                 .forEach(refreshToken ->
