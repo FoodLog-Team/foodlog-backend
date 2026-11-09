@@ -20,10 +20,10 @@ CREATE TABLE user_nutrition_profiles (
         CHECK (date_of_birth <= CURRENT_DATE - INTERVAL '18 years'),
 
     CONSTRAINT chk_user_profiles_height_range
-        CHECK (height >= 120 AND height <= 230),
+        CHECK (height BETWEEN 120 AND 230),
 
     CONSTRAINT chk_user_profiles_weight_range
-        CHECK (weight >= 30 AND weight <= 300),
+        CHECK (weight BETWEEN 30 AND 300),
 
     CONSTRAINT chk_user_profiles_sex
         CHECK (sex IN ('MALE', 'FEMALE')),

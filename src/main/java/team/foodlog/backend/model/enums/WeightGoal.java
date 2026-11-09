@@ -14,6 +14,6 @@ public enum WeightGoal {
 
     GAIN_WEIGHT(BigDecimal.valueOf(1.15));
 
-    private final BigDecimal weightGoalMultiplier;
+    private final BigDecimal multiplier;
 
 }

@@ -18,6 +18,6 @@ public enum ActivityLevel {
 
     EXTRA_ACTIVE(BigDecimal.valueOf(1.9));
 
-    private final BigDecimal activityLevelMultiplier;
+    private final BigDecimal multiplier;
 
 }
