@@ -1,4 +1,4 @@
-package team.foodlog.backend.dto.nutrition;
+package team.foodlog.backend.dto.nutrition.target;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -9,12 +9,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Documented
-@Constraint(validatedBy = CaloriesConsistentWithMacrosValidator.class)
+@Constraint(validatedBy = KcalConsistentWithMacrosValidator.class)
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CaloriesConsistentWithMacros {
+public @interface KcalConsistentWithMacros {
 
-    String message() default "Calories amount is not consistent with macros";
+    String message() default "Kcal amount is not consistent with macros";
 
     Class<?>[] groups() default {};
 
