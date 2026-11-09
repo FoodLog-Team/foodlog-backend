@@ -14,6 +14,7 @@ import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;
 import team.foodlog.backend.dto.auth.token.RefreshTokenDto;
 import team.foodlog.backend.dto.auth.token.TokenPairDto;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
+import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
 import team.foodlog.backend.model.User;
 import team.foodlog.backend.repository.UserRepository;
 import team.foodlog.backend.security.common.AuthenticatedUserIdSupplier;
@@ -88,7 +89,7 @@ public class JwtAuthenticationService implements AuthenticationService<TokenPair
     }
 
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = RevokedRefreshTokenUsageException.class)
     public TokenPairDto refresh(String token) {
         RefreshTokenDto refreshTokenDto = refreshTokenService.rotate(token);
 
