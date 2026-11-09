@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import team.foodlog.backend.exception.CustomTargetNotConfiguredException;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
-import team.foodlog.backend.exception.UserProfileAlreadyCreatedException;
+import team.foodlog.backend.exception.UserNutritionProfileAlreadyCreatedException;
 
 @RestControllerAdvice
 @Slf4j
@@ -100,11 +101,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponse(HttpStatus.NOT_FOUND, message);
     }
 
-    @ExceptionHandler(UserProfileAlreadyCreatedException.class)
-    public ResponseEntity<ErrorResponse> handleUserProfileAlreadyCreated(
-            UserProfileAlreadyCreatedException e, HttpServletRequest request
+    @ExceptionHandler(UserNutritionProfileAlreadyCreatedException.class)
+    public ResponseEntity<ErrorResponse> handleUserNutritionProfileAlreadyCreated(
+            UserNutritionProfileAlreadyCreatedException e, HttpServletRequest request
     ) {
-        String message = "User profile is already created";
+        String message = "User nutrition profile is already created";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.CONFLICT, message);
+    }
+
+    public ResponseEntity<ErrorResponse> handleCustomTargetNotConfigured(
+            CustomTargetNotConfiguredException e, HttpServletRequest request
+    ) {
+        String message = "Custom nutrition target values are no configured yet";
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.CONFLICT, message);
@@ -114,7 +124,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBadCredentials(
             BadCredentialsException e, HttpServletRequest request
     ) {
-        String message = "Invalid email or password";
+        String message = "Wrong email or password";
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.UNAUTHORIZED, message);
@@ -199,8 +209,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 message,
                 request.getMethod(),
                 request.getRequestURI(),
-                e.getClass().getSimpleName(),
-                e
+                e.getClass().getSimpleName()
         );
     }
 

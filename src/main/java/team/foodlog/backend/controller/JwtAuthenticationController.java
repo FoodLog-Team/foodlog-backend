@@ -16,8 +16,8 @@ import team.foodlog.backend.dto.auth.login.UserLoginRequestDto;
 import team.foodlog.backend.dto.auth.register.UserRegistrationRequestDto;
 import team.foodlog.backend.dto.auth.token.AccessTokenDto;
 import team.foodlog.backend.dto.auth.token.TokenPairDto;
-import team.foodlog.backend.security.AuthenticationService;
-import team.foodlog.backend.security.RefreshTokenCookieFactory;
+import team.foodlog.backend.security.common.AuthenticationService;
+import team.foodlog.backend.security.refresh.RefreshTokenCookieFactory;
 
 @RestController
 @RequiredArgsConstructor
