@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import team.foodlog.backend.exception.CustomTargetNotConfiguredException;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
@@ -110,11 +111,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, message);
     }
 
+    public ResponseEntity<ErrorResponse> handleCustomTargetNotConfigured(
+            CustomTargetNotConfiguredException e, HttpServletRequest request
+    ) {
+        String message = "Custom nutrition target values are no configured yet";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.CONFLICT, message);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentials(
             BadCredentialsException e, HttpServletRequest request
     ) {
-        String message = "Invalid email or password";
+        String message = "Wrong email or password";
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.UNAUTHORIZED, message);
@@ -199,8 +209,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 message,
                 request.getMethod(),
                 request.getRequestURI(),
-                e.getClass().getSimpleName(),
-                e
+                e.getClass().getSimpleName()
         );
     }
 
