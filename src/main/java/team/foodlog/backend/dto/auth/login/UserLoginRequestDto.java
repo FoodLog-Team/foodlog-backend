@@ -31,6 +31,7 @@ public record UserLoginRequestDto(
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotBlank
+        @StrongPassword
         @Length(min = 8, max = 32)
         String password
 ) {

@@ -5,7 +5,6 @@ import jakarta.validation.GroupSequence;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import team.foodlog.backend.dto.nutrition.profile.CustomNutritionTargetChecks;
 
 @Schema(
         description = """
@@ -24,8 +23,9 @@ public record CustomNutritionTargetRequestDto(
 
         @Schema(
                 description = """
-                        Daily calorie target in kilocalories (kcal). Must be between 800 and 8000.q
-                        Must be consistent with the sum of macronutrient calories:
+                        Daily calorie target in kilocalories (kcal). Must be between 800 and 8000.
+                        Must be consistent with the sum of
+                        macronutrient calories with 5% margin of error:
                         kcal ≈ (carbs × 4) + (protein × 4) + (fats × 9).""",
                 example = "2200",
                 minimum = "800",
