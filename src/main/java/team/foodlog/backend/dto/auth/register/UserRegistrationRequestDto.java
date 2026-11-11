@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import team.foodlog.backend.dto.auth.login.StrongPassword;
 
 @Schema(
         description = "Request payload for registering a new user account",
@@ -31,6 +32,7 @@ public record UserRegistrationRequestDto(
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
         @NotBlank
+        @StrongPassword
         @Length(min = 8, max = 32)
         String password
 ) {
