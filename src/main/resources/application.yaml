@@ -7,6 +7,10 @@ spring:
   application:
     name: FoodLog-backend
 
+  web:
+    locale: en
+    locale-resolver: fixed
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/foodlog}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
