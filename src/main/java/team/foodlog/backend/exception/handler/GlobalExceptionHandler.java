@@ -111,6 +111,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponse(HttpStatus.CONFLICT, message);
     }
 
+    @ExceptionHandler(CustomTargetNotConfiguredException.class)
     public ResponseEntity<ErrorResponse> handleCustomTargetNotConfigured(
             CustomTargetNotConfiguredException e, HttpServletRequest request
     ) {

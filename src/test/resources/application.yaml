@@ -1,5 +1,9 @@
 spring:
 
+  web:
+    locale: en
+    locale-resolver: fixed
+
   datasource:
     url: jdbc:tc:postgresql:17:///foodlog
     username: test
