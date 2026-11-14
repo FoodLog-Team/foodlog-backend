@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import team.foodlog.backend.security.common.AuthenticatedUserIdSupplier;
 
 @Component
-public class JwtAuthenticatedUserIdSupplier implements AuthenticatedUserIdSupplier<Long> {
+public class JwtAuthenticatedUserIdSupplier implements AuthenticatedUserIdSupplier {
 
     public Long get() {
         Authentication authentication = SecurityContextHolder
@@ -18,14 +18,14 @@ public class JwtAuthenticatedUserIdSupplier implements AuthenticatedUserIdSuppli
 
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new IllegalStateException(
-                "Authentication is empty, make sure to use this"
-                    + " method withing authenticated endpoints");
+                    "Authentication is empty, make sure to use this"
+                        + " method withing authenticated endpoints");
         }
 
         if (!(authentication instanceof JwtAuthenticationToken jwtAuth)) {
             throw new IllegalStateException(
-                "Authentication class is: " + authentication.getClass().getSimpleName()
-                + ". Must be JwtAuthenticationToken"
+                    "Authentication class is: " + authentication.getClass().getSimpleName()
+                    + ". Must be JwtAuthenticationToken"
             );
         }
 
