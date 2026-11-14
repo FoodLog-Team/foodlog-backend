@@ -1,14 +1,21 @@
 package team.foodlog.backend.dto.auth.register;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import java.util.Objects;
 import org.hibernate.validator.constraints.Length;
 import team.foodlog.backend.dto.auth.login.StrongPassword;
 
 @Schema(
         description = "Request payload for registering a new user account",
-        example = "{\"email\": \"newuser@example.com\", \"password\": \"SecureP@ss1\"}"
+        example = """
+                {
+                    "email": "newuser@example.com",
+                    "password": "SecureP@ss1",
+                    "confirmPassword": "SecureP@ss1"
+                }"""
 )
 public record UserRegistrationRequestDto(
 
@@ -34,6 +41,24 @@ public record UserRegistrationRequestDto(
         @NotBlank
         @StrongPassword
         @Length(min = 8, max = 32)
-        String password
+        String password,
+
+        @Schema(
+                description = """
+                        User's password confirmation. Must be identical to 'password' field""",
+                example = "SecureP@ss1",
+                minLength = 8,
+                maxLength = 32,
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        @NotBlank
+        @Length(min = 8, max = 32)
+        String confirmPassword
 ) {
+
+    @AssertTrue(message = "Passwords do not match")
+    public boolean isPasswordsMatch() {
+        return Objects.equals(password, confirmPassword);
+    }
+
 }
