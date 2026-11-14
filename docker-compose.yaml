@@ -54,5 +54,9 @@ services:
       postgres:
         condition: service_healthy
 
+    volumes:
+      - meal_photos:/app/uploads
+
 volumes:
   postgres_data:
+  meal_photos:

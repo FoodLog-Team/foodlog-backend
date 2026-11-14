@@ -1,5 +1,4 @@
 spring:
-
   web:
     locale: en
     locale-resolver: fixed
@@ -28,3 +27,6 @@ security:
       same-site: Strict
       secure: false
       max-age: 1h
+
+storage:
+  meal-photos-directory: ./uploads
