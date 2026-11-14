@@ -15,26 +15,18 @@ import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import team.foodlog.backend.model.enums.MealEntryPhotoSlot;
+import team.foodlog.backend.model.enums.PhotoFormat;
 
 @Entity
-@Accessors(chain = true)
 @Getter
-@Setter
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "meal_entry_photos")
 public class MealEntryPhoto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NonNull
-    @Setter(AccessLevel.NONE)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -48,8 +40,9 @@ public class MealEntryPhoto {
     @Column(name = "storage_key", nullable = false)
     private String storageKey;
 
-    @Column(name = "content_type", nullable = false, length = 32)
-    private String contentType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "format", nullable = false, length = 32)
+    private PhotoFormat format;
 
     @Column(name = "size_bytes", nullable = false)
     private long sizeBytes;
@@ -57,5 +50,19 @@ public class MealEntryPhoto {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
+
+    public MealEntryPhoto(
+            MealEntry mealEntry,
+            MealEntryPhotoSlot slot,
+            String storageKey,
+            PhotoFormat format,
+            long sizeBytes
+    ) {
+        this.mealEntry = mealEntry;
+        this.slot = slot;
+        this.storageKey = storageKey;
+        this.format = format;
+        this.sizeBytes = sizeBytes;
+    }
 
 }
