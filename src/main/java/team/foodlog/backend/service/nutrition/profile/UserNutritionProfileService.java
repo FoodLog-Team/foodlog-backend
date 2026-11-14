@@ -22,7 +22,7 @@ public class UserNutritionProfileService {
 
     private final UserNutritionProfileMapper userNutritionProfileMapper;
 
-    private final AuthenticatedUserIdSupplier<Long> userIdSupplier;
+    private final AuthenticatedUserIdSupplier userIdSupplier;
 
     @Transactional
     public UserNutritionProfileResponseDto create(CreateUserNutritionProfileRequestDto requestDto) {
@@ -47,7 +47,7 @@ public class UserNutritionProfileService {
                 .findById(userIdSupplier.get())
                 .orElseThrow(
                         () -> new EntityNotFoundException(
-                            "Profile was not found")
+                                "Profile was not found")
                 );
 
         userNutritionProfileMapper.update(requestDto, userNutritionProfile);

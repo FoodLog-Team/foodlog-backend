@@ -27,7 +27,7 @@ public class NutritionTargetService {
 
     private final UserNutritionProfileService userNutritionProfileService;
 
-    private final AuthenticatedUserIdSupplier<Long> userIdSupplier;
+    private final AuthenticatedUserIdSupplier userIdSupplier;
 
     private final NutritionTargetRepository nutritionTargetRepository;
 

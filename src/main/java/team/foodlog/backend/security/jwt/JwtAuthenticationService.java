@@ -29,7 +29,7 @@ public class JwtAuthenticationService implements AuthenticationService<TokenPair
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthenticatedUserIdSupplier<Long> userIdSupplier;
+    private final AuthenticatedUserIdSupplier userIdSupplier;
 
     private final JwtService jwtService;
 
