@@ -1,14 +1,13 @@
 package team.foodlog.backend.service.nutrition;
 
-import java.util.Objects;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import team.foodlog.backend.dto.nutrition.target.CustomNutritionTargetRequestDto;
+import team.foodlog.backend.dto.nutrition.target.NutritionTargetCalculationRequestDto;
 import team.foodlog.backend.dto.nutrition.target.NutritionTargetResponseDto;
-import team.foodlog.backend.exception.CustomTargetNotConfiguredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
+import team.foodlog.backend.mapper.NutritionTargetMapper;
 import team.foodlog.backend.model.NutritionTarget;
 import team.foodlog.backend.model.enums.TargetMode;
 import team.foodlog.backend.repository.NutritionTargetRepository;
@@ -31,11 +30,15 @@ public class NutritionTargetService {
 
     private final NutritionTargetRepository nutritionTargetRepository;
 
+    private final NutritionTargetMapper nutritionTargetMapper;
+
     @Transactional
     public NutritionTargetResponseDto calculateRecommendations(
-            NutritionTargetCalculationType calculationType, NutritionFormulaType formulaType
+            NutritionTargetCalculationRequestDto requestDto
     ) {
         Long userId = userIdSupplier.get();
+        NutritionTargetCalculationType calculationType = requestDto.calculationType();
+        NutritionFormulaType formulaType = requestDto.formulaType();
 
         NutritionTarget nutritionTarget = nutritionTargetRepository
                 .findById(userId)
@@ -46,20 +49,36 @@ public class NutritionTargetService {
                 .calculate(userNutritionProfileService.getProfileDto(), formulaType);
 
         nutritionTarget
-                .setRecommendedKcal(result.kcal())
-                .setRecommendedCarbs(result.carbs())
-                .setRecommendedProtein(result.protein())
-                .setRecommendedFats(result.fats());
+                .setKcal(result.kcal())
+                .setCarbs(result.carbs())
+                .setProtein(result.protein())
+                .setFats(result.fats())
+                .setTargetMode(TargetMode.RECOMMENDED)
+                .setCalculationType(calculationType)
+                .setFormulaType(formulaType);
 
-        nutritionTargetRepository.save(nutritionTarget);
-
-        return toResponse(nutritionTarget, TargetMode.RECOMMENDED);
+        return nutritionTargetMapper.toDto(nutritionTargetRepository.save(nutritionTarget));
     }
 
-    @Transactional(readOnly = true)
-    public NutritionTargetResponseDto getNutritionTarget() {
+    @Transactional
+    public NutritionTargetResponseDto getCurrentNutritionTarget() {
         NutritionTarget nutritionTarget = findNutritionTarget();
-        return toResponse(nutritionTarget, nutritionTarget.getMode());
+
+        if (nutritionTarget.getTargetMode() == TargetMode.RECOMMENDED) {
+            NutritionTargetCalculationResult result = nutritionTargetCalculationRegistry
+                    .getRequired(nutritionTarget.getCalculationType())
+                    .calculate(userNutritionProfileService.getProfileDto(),
+                            nutritionTarget.getFormulaType());
+
+            nutritionTarget
+                    .setKcal(result.kcal())
+                    .setCarbs(result.carbs())
+                    .setProtein(result.protein())
+                    .setFats(result.fats());
+        }
+
+        return nutritionTargetMapper.toDto(nutritionTarget);
+
     }
 
     @Transactional
@@ -67,52 +86,13 @@ public class NutritionTargetService {
         NutritionTarget nutritionTarget = findNutritionTarget();
 
         nutritionTarget
-                .setMode(TargetMode.CUSTOM)
-                .setCustomKcal(requestDto.kcal())
-                .setCustomCarbs(requestDto.carbs())
-                .setCustomProtein(requestDto.protein())
-                .setCustomFats(requestDto.fats());
+                .setKcal(requestDto.kcal())
+                .setCarbs(requestDto.carbs())
+                .setProtein(requestDto.protein())
+                .setFats(requestDto.fats())
+                .setTargetMode(TargetMode.CUSTOM);
 
-        return toResponse(nutritionTarget, TargetMode.CUSTOM);
-    }
-
-    @Transactional
-    public void updateMode(TargetMode targetMode) {
-        NutritionTarget nutritionTarget = findNutritionTarget();
-
-        if (targetMode == TargetMode.CUSTOM && !hasCustomValues(nutritionTarget)) {
-            throw new CustomTargetNotConfiguredException(
-                    "Unable to set target mode 'custom' due to absence of custom target values");
-        }
-        nutritionTarget.setMode(targetMode);
-    }
-
-    private NutritionTargetResponseDto toResponse(
-            NutritionTarget nutritionTarget, TargetMode targetMode) {
-        if (targetMode == TargetMode.RECOMMENDED) {
-            return new NutritionTargetResponseDto(
-                nutritionTarget.getRecommendedKcal(),
-                nutritionTarget.getRecommendedCarbs(),
-                nutritionTarget.getRecommendedProtein(),
-                nutritionTarget.getRecommendedFats()
-            );
-        }
-
-        return new NutritionTargetResponseDto(
-            nutritionTarget.getCustomKcal(),
-            nutritionTarget.getCustomCarbs(),
-            nutritionTarget.getCustomProtein(),
-            nutritionTarget.getCustomFats()
-        );
-    }
-
-    private boolean hasCustomValues(NutritionTarget nutritionTarget) {
-        return Stream.of(
-                nutritionTarget.getCustomKcal(),
-                nutritionTarget.getCustomCarbs(),
-                nutritionTarget.getCustomProtein(),
-                nutritionTarget.getCustomFats()
-        ).allMatch(Objects::nonNull);
+        return nutritionTargetMapper.toDto(nutritionTarget);
     }
 
     private NutritionTarget findNutritionTarget() {

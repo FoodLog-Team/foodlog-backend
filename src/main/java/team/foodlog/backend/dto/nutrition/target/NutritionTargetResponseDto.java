@@ -1,6 +1,9 @@
 package team.foodlog.backend.dto.nutrition.target;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import team.foodlog.backend.model.enums.TargetMode;
+import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
+import team.foodlog.backend.service.nutrition.enums.NutritionTargetCalculationType;
 
 @Schema(
         description = """
@@ -33,6 +36,42 @@ public record NutritionTargetResponseDto(
                 description = "Daily fat target in grams (g).",
                 example = "80"
         )
-        Integer fats
-) {
-}
+        Integer fats,
+
+        @Schema(
+                description = """
+                        Active nutrition target mode.
+
+                        RECOMMENDED: Targets are calculated using the user's
+                        nutrition profile.
+
+                        CUSTOM: Targets are manually configured by the user.
+                        """,
+                example = "RECOMMENDED",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        TargetMode targetMode,
+
+        @Schema(
+                description = """
+                        BMR formula used for calculating recommended nutrition targets.
+
+                        Currently supported: MIFFLIN_ST_JEOR.
+                        """,
+                example = "MIFFLIN_ST_JEOR",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        NutritionFormulaType formulaType,
+
+        @Schema(
+                description = """
+                        Strategy used to calculate daily nutrition targets.
+
+                        Currently supported: BASIC.
+                        """,
+                example = "BASIC",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
+        NutritionTargetCalculationType calculationType
+
+) {}

@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import team.foodlog.backend.exception.CustomTargetNotConfiguredException;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
@@ -106,16 +105,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             UserNutritionProfileAlreadyCreatedException e, HttpServletRequest request
     ) {
         String message = "User nutrition profile is already created";
-
-        logWarn(message, request, e);
-        return buildResponse(HttpStatus.CONFLICT, message);
-    }
-
-    @ExceptionHandler(CustomTargetNotConfiguredException.class)
-    public ResponseEntity<ErrorResponse> handleCustomTargetNotConfigured(
-            CustomTargetNotConfiguredException e, HttpServletRequest request
-    ) {
-        String message = "Custom nutrition target values are no configured yet";
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.CONFLICT, message);

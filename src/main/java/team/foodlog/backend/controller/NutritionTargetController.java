@@ -1,28 +1,23 @@
 package team.foodlog.backend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import team.foodlog.backend.dto.nutrition.target.CustomNutritionTargetRequestDto;
-import team.foodlog.backend.dto.nutrition.target.NutritionTargetModeRequestDto;
+import team.foodlog.backend.dto.nutrition.target.NutritionTargetCalculationRequestDto;
 import team.foodlog.backend.dto.nutrition.target.NutritionTargetResponseDto;
 import team.foodlog.backend.service.nutrition.NutritionTargetService;
-import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
-import team.foodlog.backend.service.nutrition.enums.NutritionTargetCalculationType;
 
 @Tag(
         name = "Nutrition Target",
@@ -52,28 +47,39 @@ public class NutritionTargetController {
                     weight goal).
 
                     The calculation uses the specified formula type (e.g., Mifflin-St Jeor)
-                    to estimate the Basal Metabolic Rate (BMR), then applies the activity level
+                    to estimate the Basal Metabolic Rate (BMR), and nutrition
+                    target calculation strategy, then applies the activity level
                     and weight goal multipliers to derive the daily calorie target.
                     Macronutrient targets (carbs, protein, fats) are then distributed
                     proportionally.
 
-                    This endpoint does NOT save the recommendations — it only returns the
-                    calculated values. To apply them, ensure the target mode is set to
-                    RECOMMENDED.
+                    The selected formula type and calculation type are saved
+                    as the user's calculation preferences.
+                    
+                    After successful calculation, the target mode is automatically
+                    switched to RECOMMENDED.
+                    
+                    Subsequent GET requests will recalculate recommendations
+                    using the latest nutrition profile.
                     """
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
                     description = """
-                            Nutrition recommendations calculated successfully.
-                            Returns the recommended target values.
-                            """
+                            Nutrition recommendations calculated successfully
+                            and saved. The target mode is now RECOMMENDED.
+                            """,
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = NutritionTargetResponseDto.class
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = """
-                            Bad request. Invalid or missing query parameters.
+                            Bad request. Missing or invalid calculation parameters.
                             Both calculationType and formulaType are required and must be
                             valid enum values.
                             """
@@ -103,88 +109,83 @@ public class NutritionTargetController {
     })
     @PostMapping("/recommendations")
     public NutritionTargetResponseDto calculateRecommendations(
-            @Parameter(
-                    description = """
-                            The calculation type for nutrition targets.
-                            Currently only BASIC is supported.
-                            """,
-                    example = "BASIC",
-                    required = true
-            )
-            @RequestParam NutritionTargetCalculationType calculationType,
-            @Parameter(
-                    description = """
-                            The formula used to calculate BMR (Basal Metabolic Rate).
-                            Currently only MIFFLIN_ST_JEOR is supported.
-                            """,
-                    example = "MIFFLIN_ST_JEOR",
-                    required = true
-            )
-            @RequestParam NutritionFormulaType formulaType
+            @Valid @RequestBody NutritionTargetCalculationRequestDto requestDto
     ) {
-        return nutritionTargetService.calculateRecommendations(calculationType, formulaType);
+        return nutritionTargetService.calculateRecommendations(requestDto);
     }
 
     @Operation(
             summary = "Get current nutrition target",
             description = """
-                    Returns the user's current active daily nutrition targets.
+                    Returns the user's currently active daily nutrition targets.
 
                     The returned values depend on the active target mode:
-                    - RECOMMENDED: Returns auto-calculated targets based on the user's nutrition
-                      profile.
-                    - CUSTOM: Returns the manually set custom targets.
 
-                    If no target mode is explicitly set, the default is RECOMMENDED.
+                    - RECOMMENDED: Nutrition targets are recalculated on every request
+                      using the latest nutrition profile and previously saved
+                      calculation preferences.
+
+                    - CUSTOM: Returns the manually configured nutrition targets
+                      saved by the user.
+
+                    The response always includes the active target mode,
+                    formula type and calculation type.
+
+                    Recalculated recommended values are returned without
+                    updating the persisted target values.
                     """
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = """
-                            Current nutrition target retrieved successfully.
-                            Returns either recommended or custom values depending on the
-                            active target mode.
-                            """
+                    description = "Current nutrition target retrieved successfully.",
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = NutritionTargetResponseDto.class
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = """
-                            Unauthorized. Authentication token is missing, expired, or invalid.
-                            This endpoint requires a valid Bearer JWT access token.
-                            """
+                    description = "Unauthorized. Missing, expired or invalid JWT token."
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = """
-                            Not found. No nutrition target record exists for this user yet.
-                            Calculate recommendations first via
-                            POST /nutrition-target/recommendations.
+                            Not found. No nutrition target configuration exists
+                            for the authenticated user, or the nutrition profile
+                            required for recommendation calculation does not exist.
                             """
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = """
-                            Internal server error. An unexpected error occurred while
-                            retrieving the target.
+                            Internal server error while retrieving nutrition targets.
                             """
             )
     })
     @GetMapping
-    public NutritionTargetResponseDto getNutritionTarget() {
-        return nutritionTargetService.getNutritionTarget();
+    public NutritionTargetResponseDto getCurrentNutritionTarget() {
+        return nutritionTargetService.getCurrentNutritionTarget();
     }
 
     @Operation(
             summary = "Save custom nutrition target",
             description = """
-                    Saves a custom daily nutrition target for the authenticated user.
+                    Saves manually configured daily nutrition targets.
 
-                    The kcal value must be consistent with the macronutrient breakdown:
+                    The calorie target must be consistent with the macronutrient
+                    breakdown:
+
                     kcal ≈ (carbs × 4) + (protein × 4) + (fats × 9).
 
-                    After saving custom targets, the user should switch the target mode to
-                    CUSTOM via the PATCH /nutrition-target/mode endpoint to activate them.
+                    The allowed difference between the specified calorie target
+                    and the calculated macronutrient calories must not exceed 5%.
+
+                    After successful saving, the target mode is automatically
+                    switched to CUSTOM.
+
+                    Previously saved formula type and calculation type are preserved.
                     """
     )
     @ApiResponses({
@@ -192,41 +193,39 @@ public class NutritionTargetController {
                     responseCode = "200",
                     description = """
                             Custom nutrition target saved successfully.
-                            Returns the saved target values.
-                            Note: the target mode is automatically switched to CUSTOM after
-                            saving.
-                            """
+                            The target mode is now CUSTOM.
+                            """,
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = NutritionTargetResponseDto.class
+                            )
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
                     description = """
-                            Bad request. Invalid values or kcal is not consistent with macros.
-                            All fields (kcal, carbs, protein, fats) are required and must be
-                            within valid ranges.
-                            The kcal value must approximately equal
-                            (carbs × 4) + (protein × 4) + (fats × 9).
+                            Bad request. Invalid target values or inconsistent
+                            calorie and macronutrient values.
+
+                            All fields are required and must be within their
+                            allowed ranges.
                             """
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = """
-                            Unauthorized. Authentication token is missing, expired, or invalid.
-                            This endpoint requires a valid Bearer JWT access token.
-                            """
+                    description = "Unauthorized. Missing, expired or invalid JWT token."
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = """
-                            Not found. No nutrition target record exists for this user yet.
-                            Calculate recommendations first via
-                            POST /nutrition-target/recommendations.
+                            No nutrition target configuration exists for this user yet.
+                            Calculate recommendations first.
                             """
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = """
-                            Internal server error. An unexpected error occurred while saving
-                            the custom target.
+                            Internal server error while saving custom nutrition targets.
                             """
             )
     })
@@ -235,71 +234,6 @@ public class NutritionTargetController {
             @Valid @RequestBody CustomNutritionTargetRequestDto requestDto
     ) {
         return nutritionTargetService.saveCustom(requestDto);
-    }
-
-    @Operation(
-            summary = "Update nutrition target mode",
-            description = """
-                    Switches the active nutrition target mode between RECOMMENDED and CUSTOM.
-
-                    - RECOMMENDED: Uses auto-calculated targets based on the user's nutrition
-                      profile.
-                    - CUSTOM: Uses the manually set custom targets (set via
-                      PUT /nutrition-target/custom).
-
-                    This endpoint does not change the target values themselves — it only
-                    switches which set of values is considered active.
-                    """
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Target mode updated successfully. No content returned."
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = """
-                            Bad request. Invalid or missing mode value.
-                            Mode must be one of: RECOMMENDED, CUSTOM.
-                            """
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = """
-                            Unauthorized. Authentication token is missing, expired, or invalid.
-                            This endpoint requires a valid Bearer JWT access token.
-                            """
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = """
-                            Not found. No nutrition target record exists for this user yet.
-                            Calculate recommendations first via
-                            POST /nutrition-target/recommendations.
-                            """
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = """
-                            Conflict. Attempting to switch to CUSTOM mode, but no custom
-                            target values have been saved yet. Save custom values first via
-                            PUT /nutrition-target/custom.
-                            """
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = """
-                            Internal server error. An unexpected error occurred while updating
-                            the target mode.
-                            """
-            )
-    })
-    @PatchMapping("/mode")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateNutritionTargetMode(
-            @Valid @RequestBody NutritionTargetModeRequestDto requestDto
-    ) {
-        nutritionTargetService.updateMode(requestDto.mode());
     }
 
 }
