@@ -2,6 +2,7 @@ package team.foodlog.backend.dto.nutrition.target;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import team.foodlog.backend.model.enums.PlateSize;
 import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
 import team.foodlog.backend.service.nutrition.enums.NutritionTargetCalculationType;
 
@@ -35,7 +36,16 @@ public record NutritionTargetCalculationRequestDto(
                 example = "BASIC",
                 requiredMode = Schema.RequiredMode.REQUIRED
         )
-        NutritionTargetCalculationType calculationType
+        NutritionTargetCalculationType calculationType,
+
+        @NotNull
+        @Schema(
+                description = """
+                    Size of the plate used to estimate food quantity.
+                """,
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED
+        )
+        PlateSize plateSize
 
 ) {
 }
