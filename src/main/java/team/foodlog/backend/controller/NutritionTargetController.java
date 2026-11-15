@@ -131,7 +131,7 @@ public class NutritionTargetController {
                     The response always includes the active target mode,
                     formula type and calculation type.
 
-                    Recalculated recommended values are returned without
+                    Recalculated recommended values are returned also
                     updating the persisted target values.
                     """
     )
