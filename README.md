@@ -53,22 +53,22 @@ SPRING_LOCAL_PORT=8080
 SPRING_DOCKER_PORT=8080
 
 # --- JWT Authentication ---
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_SECRET=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY= (use yours)
 
 # --- Google Gemini AI ---
 GEMINI_API_KEY=your-gemini-api-key-here
 
 # --- Refresh Token Configuration ---
-REFRESH_TOKEN_EXPIRATION=7
+REFRESH_TOKEN_EXPIRATION=30d
 REFRESH_TOKEN_MAX_AMOUNT=5
-REFRESH_TOKEN_MAX_AGE=30
-REFRESH_TOKEN_COOKIE_PATH=/api/auth/refresh
+REFRESH_TOKEN_MAX_AGE=30d
+REFRESH_TOKEN_COOKIE_PATH=/api/auth
 REFRESH_TOKEN_COOKIE_SECURE=true
 ```
 
 ### Important Notes on Environment Variables
 
-- **`JWT_SECRET`**: Must be a strong, randomly generated string. Never commit this to version control.
+- **`JWT_SECRET`**: Must be a strong, randomly generated base64 string. Never commit this to version control.
 - **`GEMINI_API_KEY`**: Your Google AI Studio API key. The application will not start without it.
 - **`REFRESH_TOKEN_COOKIE_SECURE`**: Set to `true` in production (HTTPS). You may set it to `false` for local development over HTTP.
 - **`POSTGRES_PASSWORD`**: Change the default password for production use.
