@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import team.foodlog.backend.model.enums.TargetMode;
+import team.foodlog.backend.service.nutrition.enums.NutritionFormulaType;
+import team.foodlog.backend.service.nutrition.enums.NutritionTargetCalculationType;
 
 @Entity
 @Accessors(chain = true)
@@ -31,33 +33,29 @@ public class NutritionTarget {
     @Setter(AccessLevel.NONE)
     private Long userId;
 
-    @Column(name = "recommended_kcal", nullable = false)
-    private Integer recommendedKcal;
+    @Column(nullable = false)
+    private Integer kcal;
 
-    @Column(name = "recommended_carbs", nullable = false)
-    private Integer recommendedCarbs;
+    @Column(nullable = false)
+    private Integer carbs;
 
-    @Column(name = "recommended_protein", nullable = false)
-    private Integer recommendedProtein;
+    @Column(nullable = false)
+    private Integer protein;
 
-    @Column(name = "recommended_fats", nullable = false)
-    private Integer recommendedFats;
+    @Column(nullable = false)
+    private Integer fats;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "mode", nullable = false, length = 32)
-    private TargetMode mode = TargetMode.RECOMMENDED;
+    @Column(name = "target_mode", nullable = false, length = 32)
+    private TargetMode targetMode = TargetMode.RECOMMENDED;
 
-    @Column(name = "custom_kcal")
-    private Integer customKcal;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "formula_type", nullable = false, length = 32)
+    private NutritionFormulaType formulaType = NutritionFormulaType.MIFFLIN_ST_JEOR;
 
-    @Column(name = "custom_carbs")
-    private Integer customCarbs;
-
-    @Column(name = "custom_protein")
-    private Integer customProtein;
-
-    @Column(name = "custom_fats")
-    private Integer customFats;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "calculation_type", nullable = false, length = 32)
+    private NutritionTargetCalculationType calculationType = NutritionTargetCalculationType.BASIC;
 
     @Version
     @Setter(AccessLevel.NONE)

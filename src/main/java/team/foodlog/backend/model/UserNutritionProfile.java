@@ -50,11 +50,11 @@ public class UserNutritionProfile {
     private Sex sex;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 32)
+    @Column(name = "activity_level", nullable = false, length = 32)
     private ActivityLevel activityLevel;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 32)
+    @Column(name = "weight_goal", nullable = false, length = 32)
     private WeightGoal weightGoal;
 
     @CreationTimestamp
