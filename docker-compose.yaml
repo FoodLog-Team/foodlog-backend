@@ -50,12 +50,14 @@ services:
       REFRESH_TOKEN_MAX_AMOUNT: ${REFRESH_TOKEN_MAX_AMOUNT}
       REFRESH_TOKEN_MAX_AGE_IN_DAYS: ${REFRESH_TOKEN_MAX_AGE}
 
+      MEAL_PHOTOS_DIRECTORY: /application/uploads
+
     depends_on:
       postgres:
         condition: service_healthy
 
     volumes:
-      - meal_photos:/app/uploads
+      - meal_photos:/application/uploads
 
 volumes:
   postgres_data:

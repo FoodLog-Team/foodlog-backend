@@ -54,4 +54,4 @@ security:
       max-age: ${REFRESH_TOKEN_MAX_AGE}
 
 storage:
-  meal-photos-directory: ./uploads
+  meal-photos-directory: ${MEAL_PHOTOS_DIRECTORY:./uploads}
