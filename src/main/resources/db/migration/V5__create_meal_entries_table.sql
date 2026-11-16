@@ -1,6 +1,7 @@
 CREATE TABLE meal_entries(
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id BIGINT NOT NULL,
+    plate_size VARCHAR(32) NOT NULL DEFAULT 'MEDIUM',
     analysis_status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
     ai_confidence VARCHAR(32) NOT NULL DEFAULT 'UNKNOWN',
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -9,6 +10,9 @@ CREATE TABLE meal_entries(
         FOREIGN KEY (user_id)
         REFERENCES users (id)
         ON DELETE CASCADE,
+
+    CONSTRAINT chk_plate_size
+        CHECK (plate_size IN ('SMALL', 'MEDIUM', 'LARGE')),
 
     CONSTRAINT chk_analysis_status
         CHECK (analysis_status IN ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED')),

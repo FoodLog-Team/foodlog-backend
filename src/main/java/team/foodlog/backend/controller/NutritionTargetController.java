@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.foodlog.backend.dto.nutrition.target.CustomNutritionTargetRequestDto;
 import team.foodlog.backend.dto.nutrition.target.NutritionTargetCalculationRequestDto;
 import team.foodlog.backend.dto.nutrition.target.NutritionTargetResponseDto;
-import team.foodlog.backend.service.nutrition.NutritionTargetService;
+import team.foodlog.backend.service.nutrition.target.NutritionTargetService;
 
 @Tag(
         name = "Nutrition Target",
@@ -131,7 +131,7 @@ public class NutritionTargetController {
                     The response always includes the active target mode,
                     formula type and calculation type.
 
-                    Recalculated recommended values are returned without
+                    Recalculated recommended values are returned but not
                     updating the persisted target values.
                     """
     )
@@ -174,14 +174,6 @@ public class NutritionTargetController {
             description = """
                     Saves manually configured daily nutrition targets.
 
-                    The calorie target must be consistent with the macronutrient
-                    breakdown:
-
-                    kcal ≈ (carbs × 4) + (protein × 4) + (fats × 9).
-
-                    The allowed difference between the specified calorie target
-                    and the calculated macronutrient calories must not exceed 5%.
-
                     After successful saving, the target mode is automatically
                     switched to CUSTOM.
 
@@ -204,8 +196,7 @@ public class NutritionTargetController {
             @ApiResponse(
                     responseCode = "400",
                     description = """
-                            Bad request. Invalid target values or inconsistent
-                            calorie and macronutrient values.
+                            Bad request. Invalid target values.
 
                             All fields are required and must be within their
                             allowed ranges.

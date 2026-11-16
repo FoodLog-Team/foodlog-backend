@@ -39,8 +39,8 @@ spring:
         api-key: ${GEMINI_API_KEY}
 
 jwt:
-  secret: {JWT_SECRET}
-  expiration: {JWT_EXPIRATION}
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
 
 security:
   refresh-token:
@@ -54,4 +54,4 @@ security:
       max-age: ${REFRESH_TOKEN_MAX_AGE}
 
 storage:
-  meal-photos-directory: ./uploads
+  meal-photos-directory: ${MEAL_PHOTOS_DIRECTORY:./uploads}

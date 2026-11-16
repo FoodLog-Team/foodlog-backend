@@ -19,6 +19,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import team.foodlog.backend.model.enums.AiConfidence;
 import team.foodlog.backend.model.enums.MealAnalysisStatus;
+import team.foodlog.backend.model.enums.PlateSize;
 
 @Entity
 @Accessors(chain = true)
@@ -38,6 +39,10 @@ public class MealEntry {
     @NonNull
     @Setter(AccessLevel.NONE)
     private Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "plate_size", nullable = false, length = 32)
+    private PlateSize plateSize = PlateSize.MEDIUM;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "analysis_status", nullable = false, length = 32)

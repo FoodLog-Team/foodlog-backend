@@ -13,6 +13,7 @@ import team.foodlog.backend.mapper.UserNutritionProfileMapper;
 import team.foodlog.backend.model.UserNutritionProfile;
 import team.foodlog.backend.repository.UserNutritionProfileRepository;
 import team.foodlog.backend.security.common.AuthenticatedUserIdSupplier;
+import team.foodlog.backend.service.nutrition.target.NutritionTargetSynchronizator;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,8 @@ public class UserNutritionProfileService {
     private final UserNutritionProfileMapper userNutritionProfileMapper;
 
     private final AuthenticatedUserIdSupplier userIdSupplier;
+
+    private final NutritionTargetSynchronizator nutritionTargetSynchronizator;
 
     @Transactional
     public UserNutritionProfileResponseDto create(CreateUserNutritionProfileRequestDto requestDto) {
@@ -36,6 +39,11 @@ public class UserNutritionProfileService {
                 requestDto,
                 userId
         );
+
+        userNutritionProfileRepository.save(userNutritionProfile);
+
+        nutritionTargetSynchronizator.synchronize(
+                userNutritionProfileMapper.toDto(userNutritionProfile), userId);
 
         return userNutritionProfileMapper
                 .toResponseDto(userNutritionProfileRepository.save(userNutritionProfile));
@@ -51,6 +59,11 @@ public class UserNutritionProfileService {
                 );
 
         userNutritionProfileMapper.update(requestDto, userNutritionProfile);
+
+        nutritionTargetSynchronizator.synchronize(
+                userNutritionProfileMapper.toDto(userNutritionProfile),
+                userNutritionProfile.getUserId()
+        );
 
         return userNutritionProfileMapper.toResponseDto(userNutritionProfile);
     }

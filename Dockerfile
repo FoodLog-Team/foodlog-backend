@@ -12,7 +12,10 @@ FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /application
 
-RUN groupadd --system app && useradd --system --gid app app
+RUN groupadd --system app \
+    && useradd --system --gid app app \
+    && mkdir -p /application/uploads \
+    && chown -R app:app /application/uploads
 
 COPY --from=builder /application/target/backend-0.0.1-SNAPSHOT.jar app.jar
 

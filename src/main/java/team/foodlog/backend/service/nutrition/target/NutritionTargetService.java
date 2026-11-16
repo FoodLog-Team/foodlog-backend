@@ -1,4 +1,4 @@
-package team.foodlog.backend.service.nutrition;
+package team.foodlog.backend.service.nutrition.target;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import team.foodlog.backend.service.nutrition.profile.UserNutritionProfileServic
 
 @Service
 @RequiredArgsConstructor
-public class NutritionTargetService {
+public class NutritionTargetService implements NutritionTargetProvider {
 
     private final NutritionTargetCalculationRegistry nutritionTargetCalculationRegistry;
 
@@ -60,33 +60,22 @@ public class NutritionTargetService {
         return nutritionTargetMapper.toDto(nutritionTargetRepository.save(nutritionTarget));
     }
 
-    @Transactional
+    @Override
+    @Transactional(readOnly = true)
     public NutritionTargetResponseDto getCurrentNutritionTarget() {
-        NutritionTarget nutritionTarget = findNutritionTarget();
-
-        if (nutritionTarget.getTargetMode() == TargetMode.RECOMMENDED) {
-            NutritionTargetCalculationResult result = nutritionTargetCalculationRegistry
-                    .getRequired(nutritionTarget.getCalculationType())
-                    .calculate(userNutritionProfileService.getProfileDto(),
-                            nutritionTarget.getFormulaType());
-
-            nutritionTarget
-                    .setKcal(result.kcal())
-                    .setCarbs(result.carbs())
-                    .setProtein(result.protein())
-                    .setFats(result.fats());
-        }
-
-        return nutritionTargetMapper.toDto(nutritionTarget);
-
+        return nutritionTargetMapper.toDto(findNutritionTarget());
     }
 
     @Transactional
     public NutritionTargetResponseDto saveCustom(CustomNutritionTargetRequestDto requestDto) {
         NutritionTarget nutritionTarget = findNutritionTarget();
 
+        int kcal = requestDto.carbs() * 4
+                + requestDto.protein() * 4
+                + requestDto.fats() * 9;
+
         nutritionTarget
-                .setKcal(requestDto.kcal())
+                .setKcal(kcal)
                 .setCarbs(requestDto.carbs())
                 .setProtein(requestDto.protein())
                 .setFats(requestDto.fats())

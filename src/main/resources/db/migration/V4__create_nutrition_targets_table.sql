@@ -57,19 +57,5 @@ CREATE TABLE nutrition_targets(
         CHECK (
             fats IS NULL
                 OR fats BETWEEN 1 AND 500
-            ),
-
-    CONSTRAINT chk_nutrition_targets_macros_consistency
-        CHECK (
-            kcal IS NULL
-                OR
-            20 * ABS(
-                    kcal::BIGINT
-                        - (
-                        carbs::BIGINT * 4
-                            + protein::BIGINT * 4
-                            + fats::BIGINT * 9
-                        )
-                 ) <= kcal::BIGINT
             )
 );

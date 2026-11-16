@@ -37,5 +37,4 @@ public record NutritionTargetCalculationRequestDto(
         )
         NutritionTargetCalculationType calculationType
 
-) {
-}
+) {}
