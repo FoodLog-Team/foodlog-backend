@@ -25,6 +25,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
+import team.foodlog.backend.exception.InvalidMealItemNameException;
+import team.foodlog.backend.exception.InvalidPhotoException;
+import team.foodlog.backend.exception.PhotoNotFoundException;
+import team.foodlog.backend.exception.PhotoStorageException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
 import team.foodlog.backend.exception.RefreshTokenNotFoundException;
 import team.foodlog.backend.exception.RevokedRefreshTokenUsageException;
@@ -98,6 +102,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         logWarn(message, request, e);
         return buildResponse(HttpStatus.NOT_FOUND, message);
+    }
+
+    @ExceptionHandler(PhotoNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePhotoNotFound(
+            PhotoNotFoundException e, HttpServletRequest request
+    ) {
+        String message = "Photo was not found";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.NOT_FOUND, message);
+    }
+
+    @ExceptionHandler(PhotoStorageException.class)
+    public ResponseEntity<ErrorResponse> handlePhotoStorage(
+            PhotoStorageException e, HttpServletRequest request
+    ) {
+        String message = "Photo operation failed";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, message);
+    }
+
+    @ExceptionHandler(InvalidMealItemNameException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidMealItemName(
+            InvalidMealItemNameException e, HttpServletRequest request
+    ) {
+        String message = "Invalid meal item name";
+
+        logWarn(message, request, e);
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
     @ExceptionHandler(UserNutritionProfileAlreadyCreatedException.class)
@@ -174,7 +208,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 e.getClass().getSimpleName(),
                 request.getMethod(),
                 request.getRequestURI(),
-                e.getCause()
+                e
         );
 
         return buildResponse(
