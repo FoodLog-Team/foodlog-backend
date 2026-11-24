@@ -144,10 +144,10 @@ public class FoodRecognitionService {
                 .path("content")
                 .asString();
 
-        log.info("Groq response: {}", json);
+        log.debug("Groq response: {}", json);
 
         JsonNode usage = response.path("usage");
-        log.info(
+        log.debug(
                 "Groq tokens: prompt={}, completion={}",
                 usage.path("prompt_tokens").asInt(),
                 usage.path("completion_tokens").asInt()

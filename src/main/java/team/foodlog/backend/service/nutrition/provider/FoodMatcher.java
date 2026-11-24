@@ -25,7 +25,7 @@ public class FoodMatcher {
                 .findFirst();
 
         if (exactMatch.isPresent()) {
-            log.info("Exact match: {}", exactMatch.get());
+            log.debug("Exact match: {}", exactMatch.get());
             return exactMatch;
         }
 

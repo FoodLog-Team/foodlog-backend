@@ -73,14 +73,14 @@ public class UsdaNutritionInfoProvider implements NutritionInfoProvider {
                     "No nutrition info for '" + name + "' in USDA database");
         }
 
-        log.info("USDA returned {} foods for '{}'",
+        log.debug("USDA returned {} foods for '{}'",
                 response.foods().size(), name);
 
         List<UsdaFood> foods = response.foods().stream()
                 .filter(foodValidator::isValid)
                 .toList();
 
-        log.info("USDA valid foods for '{}': {}",
+        log.debug("USDA valid foods for '{}': {}",
                 name, foods.stream().map(UsdaFood::name).toList());
 
         if (foods.isEmpty()) {
@@ -106,7 +106,7 @@ public class UsdaNutritionInfoProvider implements NutritionInfoProvider {
                                 + bestMatchId
                 ));
 
-        log.info("Best match was: {}", bestMatch);
+        log.debug("Best match was: {}", bestMatch);
 
         return CompletableFuture.completedFuture(mapper.map(bestMatch));
     }
