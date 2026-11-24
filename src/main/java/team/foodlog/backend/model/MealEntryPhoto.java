@@ -11,11 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import team.foodlog.backend.model.enums.MealEntryPhotoSlot;
 import team.foodlog.backend.model.enums.PhotoFormat;
 
@@ -46,10 +44,6 @@ public class MealEntryPhoto {
 
     @Column(name = "size_bytes", nullable = false)
     private long sizeBytes;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
 
     public MealEntryPhoto(
             MealEntry mealEntry,

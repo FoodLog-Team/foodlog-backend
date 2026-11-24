@@ -8,11 +8,6 @@ spring:
     username: test
     password: test
 
-  ai:
-    google:
-      genai:
-        api-key: test
-
 jwt:
   secret: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
   expiration: 3600000
@@ -30,3 +25,12 @@ security:
 
 storage:
   meal-photos-directory: ./uploads
+
+groq:
+  apiKey: "groq-test-api-key"
+  baseUrl: https://api.groq.com/openai/v1
+  model: ${GROQ_MODEL:qwen/qwen3.8-27b}
+
+usda:
+  api-key: "usda-test-api-key"
+  base-url: https://api.nal.usda.gov/fdc/v1

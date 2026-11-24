@@ -30,13 +30,13 @@ public class BasicNutritionTargetCalculator
                 .multiply(arguments.activityLevelMultiplier())
                 .multiply(arguments.weightGoalMultiplier());
 
-        BigDecimal carbs = kcal.multiply(CARBS_RATIO)
+        BigDecimal carbs = kcal.multiply(NutritionConstants.CARBS_RATIO)
                 .divide(NutritionConstants.KCAL_PER_GRAM_OF_CARBS, RoundingMode.HALF_UP);
 
-        BigDecimal protein = kcal.multiply(PROTEIN_RATIO)
+        BigDecimal protein = kcal.multiply(NutritionConstants.PROTEIN_RATIO)
                 .divide(NutritionConstants.KCAL_PER_GRAM_OF_PROTEIN, RoundingMode.HALF_UP);
 
-        BigDecimal fats = kcal.multiply(FATS_RATIO)
+        BigDecimal fats = kcal.multiply(NutritionConstants.FATS_RATIO)
                 .divide(NutritionConstants.KCAL_PER_GRAM_OF_FAT, RoundingMode.HALF_UP);
 
         return new NutritionTargetCalculationResult(
