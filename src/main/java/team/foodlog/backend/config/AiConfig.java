@@ -19,7 +19,6 @@ public class AiConfig {
 
     @Bean(name = GROQ_REST_CLIENT_BEAN_NAME)
     RestClient groqRestClient(RestClient.Builder builder) {
-        log.info("Groq api key length: " + groqProperties.apiKey().length());
         return builder
                 .baseUrl(groqProperties.baseUrl())
                 .defaultHeader(

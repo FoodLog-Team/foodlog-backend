@@ -18,6 +18,7 @@ import team.foodlog.backend.model.enums.AiConfidence;
 import team.foodlog.backend.model.enums.MealAnalysisStatus;
 import team.foodlog.backend.model.enums.MealEntryPhotoSlot;
 import team.foodlog.backend.model.enums.MealEntryProcessingError;
+import team.foodlog.backend.model.enums.MealItemFetchingStatus;
 import team.foodlog.backend.model.enums.PlateSize;
 import team.foodlog.backend.repository.MealEntryItemRepository;
 import team.foodlog.backend.repository.MealEntryRepository;
@@ -97,6 +98,7 @@ public class MealEntryService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         List<NutritionInfo> nutritions = items.stream()
+                .filter(item -> item.status() == MealItemFetchingStatus.COMPLETED)
                 .map(MealEntryItemResponseDto::total)
                 .toList();
 

@@ -23,7 +23,8 @@ public class NutritionInfoRequestedEventPublisher {
                 result.items().stream()
                         .collect(Collectors.toUnmodifiableMap(
                                 RecognizedFoodItem::name,
-                                RecognizedFoodItem::estimatedWeightGrams
+                                RecognizedFoodItem::estimatedWeightGrams,
+                                (first, second) -> first
                         ))
         ));
     }

@@ -28,7 +28,7 @@ public class FoodRecognitionRequestedEventProcessor {
 
     @Async(AsyncConfig.AI_REQUEST_EXECUTOR_BEAN_NAME)
     public void process(FoodRecognitionRequestedEvent event) {
-        log.info("AI processing started: {}", event.mealEntryId());
+        log.debug("AI processing started: {}", event.mealEntryId());
 
         mealEntryService.markProcessing(event.mealEntryId(), event.userId());
 
@@ -36,12 +36,12 @@ public class FoodRecognitionRequestedEventProcessor {
             List<MealEntryPhoto> photos = mealEntryPhotoRepository
                     .findAllById(event.photoIds());
 
-            log.info("Gemini recognition started: {}", event.mealEntryId());
+            log.debug("Gemini recognition started: {}", event.mealEntryId());
 
             FoodRecognitionResult result =
                     foodRecognitionService.recognize(photos, event.plateSize());
 
-            log.info("Gemini recognition completed: {}", event.mealEntryId());
+            log.debug("Gemini recognition completed: {}", event.mealEntryId());
 
             switch (result.status()) {
                 case NO_FOOD -> {
@@ -70,11 +70,11 @@ public class FoodRecognitionRequestedEventProcessor {
                     event.mealEntryId(), event.userId(), result.aiConfidence()
             );
 
-            log.info("Nutrition processing started: {}", event.mealEntryId());
+            log.debug("Nutrition processing started: {}", event.mealEntryId());
 
-            log.info("Publishing nutrition event for meal entry {}", event.mealEntryId());
+            log.debug("Publishing nutrition event for meal entry {}", event.mealEntryId());
             publisher.publish(result, event.userId(), event.mealEntryId());
-            log.info("Nutrition event published for meal entry {}", event.mealEntryId());
+            log.debug("Nutrition event published for meal entry {}", event.mealEntryId());
         } catch (InvalidPhotoException e) {
             throw e;
         } catch (Exception e) {
