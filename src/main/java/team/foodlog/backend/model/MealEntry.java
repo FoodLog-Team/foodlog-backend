@@ -19,6 +19,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import team.foodlog.backend.model.enums.AiConfidence;
 import team.foodlog.backend.model.enums.MealAnalysisStatus;
+import team.foodlog.backend.model.enums.MealEntryProcessingError;
 import team.foodlog.backend.model.enums.PlateSize;
 
 @Entity
@@ -51,6 +52,10 @@ public class MealEntry {
     @Enumerated(EnumType.STRING)
     @Column(name = "ai_confidence", nullable = false, length = 32)
     private AiConfidence aiConfidence = AiConfidence.UNKNOWN;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "processing_error", length = 32)
+    private MealEntryProcessingError processingError;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
