@@ -19,10 +19,16 @@ public record MealEntryItemResponseDto(
         @Schema(description = "Estimated food weight in grams.", example = "150.0")
         BigDecimal grams,
 
-        @Schema(description = "Calculated calories and macronutrients for the specified weight.")
+        @Schema(
+                description = "Calculated calories and macronutrients for the specified weight.",
+                nullable = true
+        )
         NutritionInfo total,
 
-        @Schema(description = "Calories and macronutrients per 100 grams of the food.")
+        @Schema(
+                description = "Calories and macronutrients per 100 grams of the food.",
+                nullable = true
+        )
         NutritionInfo per100g,
 
         @Schema(
