@@ -55,12 +55,13 @@ public class NutritionTargetController {
 
                     The selected formula type and calculation type are saved
                     as the user's calculation preferences.
-                    
+
                     After successful calculation, the target mode is automatically
                     switched to RECOMMENDED.
-                    
-                    Subsequent GET requests will recalculate recommendations
-                    using the latest nutrition profile.
+
+                    The calculated values are saved and returned by subsequent GET requests.
+                    When the nutrition profile is created or updated, the saved target is
+                    synchronized automatically while RECOMMENDED mode is active.
                     """
     )
     @ApiResponses({
@@ -117,28 +118,26 @@ public class NutritionTargetController {
     @Operation(
             summary = "Get current nutrition target",
             description = """
-                    Returns the user's currently active daily nutrition targets.
+                    Returns the nutrition target currently stored for the authenticated user.
+                    This endpoint only reads the saved target. It does not recalculate
+                    or update the target.
 
                     The returned values depend on the active target mode:
 
-                    - RECOMMENDED: Nutrition targets are recalculated on every request
-                      using the latest nutrition profile and previously saved
-                      calculation preferences.
+                    - RECOMMENDED: Returns values saved by the latest recommendation calculation
+                      or by profile synchronization. Creating or updating the nutrition profile
+                      recalculates the stored target while RECOMMENDED mode is active.
 
-                    - CUSTOM: Returns the manually configured nutrition targets
-                      saved by the user.
+                    - CUSTOM: Returns manually configured values saved by the user. Profile
+                      synchronization does not overwrite a CUSTOM target.
 
-                    The response always includes the active target mode,
-                    formula type and calculation type.
-
-                    Recalculated recommended values are returned but not
-                    updating the persisted target values.
+                    The response also includes the selected formula type and calculation type.
                     """
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Current nutrition target retrieved successfully.",
+                    description = "Current saved nutrition target retrieved successfully.",
                     content = @Content(
                             schema = @Schema(
                                     implementation = NutritionTargetResponseDto.class
@@ -153,8 +152,8 @@ public class NutritionTargetController {
                     responseCode = "404",
                     description = """
                             Not found. No nutrition target configuration exists
-                            for the authenticated user, or the nutrition profile
-                            required for recommendation calculation does not exist.
+                            for the authenticated user. Create a nutrition profile or
+                            calculate recommendations first.
                             """
             ),
             @ApiResponse(
@@ -210,7 +209,8 @@ public class NutritionTargetController {
                     responseCode = "404",
                     description = """
                             No nutrition target configuration exists for this user yet.
-                            Calculate recommendations first.
+                            Create a nutrition profile first.
+                            A recommended target is initialized automatically.
                             """
             ),
             @ApiResponse(
