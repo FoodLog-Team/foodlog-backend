@@ -18,6 +18,7 @@ import team.foodlog.backend.config.AiConfig;
 import team.foodlog.backend.model.MealEntryPhoto;
 import team.foodlog.backend.model.enums.PlateSize;
 import team.foodlog.backend.properties.GroqProperties;
+import team.foodlog.backend.service.meal.recognition.enums.RecognitionStatus;
 import team.foodlog.backend.service.photo.PhotoStorage;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
@@ -159,6 +160,7 @@ public class FoodRecognitionService {
                 - Base every conclusion exclusively on visual evidence.
                 - Do not calculate calories or macronutrients.
                 - Return only the requested structured result.
+                - Never return same food name twice.
             
                 OUTPUT FORMAT:
                 - Return a valid JSON object.
@@ -252,6 +254,20 @@ public class FoodRecognitionService {
 
             if (!violations.isEmpty()) {
                 throw new ConstraintViolationException(violations);
+            }
+
+            if (result.status() == RecognitionStatus.FOOD_FOUND
+                    && result.items().isEmpty()) {
+                throw new IllegalStateException(
+                        "AI returned FOOD_FOUND with an empty items list"
+                );
+            }
+
+            if (result.status() != RecognitionStatus.FOOD_FOUND
+                    && !result.items().isEmpty()) {
+                throw new IllegalStateException(
+                        "AI returned food items with a non-FOOD_FOUND status"
+                );
             }
 
             return result;
