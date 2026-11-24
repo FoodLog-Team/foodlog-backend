@@ -26,7 +26,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.InvalidMealItemNameException;
-import team.foodlog.backend.exception.InvalidPhotoException;
 import team.foodlog.backend.exception.PhotoNotFoundException;
 import team.foodlog.backend.exception.PhotoStorageException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
