@@ -2,7 +2,7 @@ FROM maven:3.9-eclipse-temurin-21 AS builder
 
 WORKDIR /application
 
-COPY pom.xml checkstyle.xml ./
+COPY pom.xml checkstyle.xml lombok.config ./
 RUN mvn -B dependency:go-offline
 
 COPY src ./src
