@@ -5,7 +5,6 @@ CREATE TABLE meal_entry_photos(
     storage_key VARCHAR(255) NOT NULL UNIQUE,
     format VARCHAR(32) NOT NULL,
     size_bytes BIGINT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_meal_entry_photos_meal_entry_id
         FOREIGN KEY (meal_entry_id)
