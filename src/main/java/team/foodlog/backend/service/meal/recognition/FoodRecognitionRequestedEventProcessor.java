@@ -82,7 +82,7 @@ public class FoodRecognitionRequestedEventProcessor {
             mealEntryService.markFailed(
                     event.mealEntryId(),
                     event.userId(),
-                    MealEntryProcessingError.NUTRITION_FETCHING_FAILED
+                    MealEntryProcessingError.RECOGNITION_FAILED
             );
             throw e;
         }

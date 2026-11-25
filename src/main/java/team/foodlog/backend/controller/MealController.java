@@ -175,12 +175,13 @@ public class MealController {
                     description = "Unexpected error while accepting the food item."
             )
     })
-    @PostMapping("/products")
+    @PostMapping("/{mealEntryId}/products")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void addItem(
+    public void addProduct(
+            @PathVariable Long mealEntryId,
             @Valid @RequestBody CreateMealEntryItemRequestDto requestDto
     ) {
-        mealEntryItemService.create(requestDto);
+        mealEntryItemService.create(mealEntryId, requestDto);
     }
 
 }
