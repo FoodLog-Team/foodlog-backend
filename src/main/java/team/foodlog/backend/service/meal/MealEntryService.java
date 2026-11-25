@@ -106,6 +106,7 @@ public class MealEntryService {
                 mealEntryId, mealEntry.getAnalysisStatus(),
                 mealEntry.getProcessingError(),
                 totalGrams,
+                mealEntry.getAiConfidence(),
                 NutritionCalculator.calculateTotal(nutritions),
                 items
         );

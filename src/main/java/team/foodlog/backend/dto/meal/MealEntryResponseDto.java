@@ -3,6 +3,7 @@ package team.foodlog.backend.dto.meal;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.List;
+import team.foodlog.backend.model.enums.AiConfidence;
 import team.foodlog.backend.model.enums.MealAnalysisStatus;
 import team.foodlog.backend.model.enums.MealEntryProcessingError;
 import team.foodlog.backend.service.nutrition.calculator.NutritionInfo;
@@ -40,6 +41,12 @@ public record MealEntryResponseDto(
                 example = "350.0"
         )
         BigDecimal grams,
+
+        @Schema(
+                description = "Confidence of the AI food recognition (recognition only).",
+                example = "HIGH"
+        )
+        AiConfidence aiConfidence,
 
         @Schema(
                 description = """

@@ -44,13 +44,13 @@ public class MealEntryItemService {
     }
 
     @Transactional
-    public void create(CreateMealEntryItemRequestDto requestDto) {
+    public void create(Long mealEntryId, CreateMealEntryItemRequestDto requestDto) {
         Long userId = userIdSupplier.get();
-        mealEntryService.markProcessing(requestDto.mealEntryId(), userId);
+        mealEntryService.markProcessing(mealEntryId, userId);
 
         eventPublisher.publish(
                 requestDto.name(), requestDto.weight(),
-                userId, requestDto.mealEntryId()
+                userId, mealEntryId
         );
     }
 

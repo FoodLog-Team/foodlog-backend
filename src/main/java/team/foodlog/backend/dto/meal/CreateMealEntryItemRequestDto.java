@@ -13,21 +13,12 @@ import java.math.BigDecimal;
                 """,
         example = """
                 {
-                    "mealEntryId": 1,
                     "name": "Bread",
                     "weight": 80.0
                 }
                 """
 )
 public record CreateMealEntryItemRequestDto(
-
-        @Schema(
-                description = "ID of the meal entry to which the food item will be added.",
-                example = "1",
-                requiredMode = Schema.RequiredMode.REQUIRED
-        )
-        @NotNull
-        Long mealEntryId,
 
         @Schema(
                 description = """
