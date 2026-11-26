@@ -73,7 +73,7 @@ public class UserNutritionProfileService {
         return userNutritionProfileMapper.toDto(
                 userNutritionProfileRepository.findById(userIdSupplier.get())
                         .orElseThrow(
-                                () -> new IllegalStateException(
+                                () -> new EntityNotFoundException(
                                         "User nutrition profile was not created yet")
                         )
         );
