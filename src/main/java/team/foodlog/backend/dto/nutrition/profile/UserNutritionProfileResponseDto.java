@@ -1,6 +1,7 @@
 package team.foodlog.backend.dto.nutrition.profile;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import team.foodlog.backend.model.enums.ActivityLevel;
 import team.foodlog.backend.model.enums.Sex;
@@ -34,9 +35,9 @@ public record UserNutritionProfileResponseDto(
 
         @Schema(
                 description = "User's weight in kilograms.",
-                example = "70"
+                example = "70.5"
         )
-        Integer weight,
+        BigDecimal weight,
 
         @Schema(
                 description = "User's biological sex.",
