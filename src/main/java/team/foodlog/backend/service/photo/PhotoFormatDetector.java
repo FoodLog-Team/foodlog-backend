@@ -18,7 +18,7 @@ public class PhotoFormatDetector {
 
     public PhotoFormat detect(MultipartFile photo) {
         if (photo == null || photo.isEmpty()) {
-            throw new InvalidPhotoException("Photo is missing");
+            throw new InvalidPhotoException("Photo is missing or empty");
         }
 
         if (photo.getSize() > MAX_FILE_SIZE) {

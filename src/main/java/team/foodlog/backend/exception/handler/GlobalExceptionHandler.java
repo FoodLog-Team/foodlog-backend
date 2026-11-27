@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
 import team.foodlog.backend.exception.InvalidMealItemNameException;
+import team.foodlog.backend.exception.InvalidPhotoException;
 import team.foodlog.backend.exception.PhotoNotFoundException;
 import team.foodlog.backend.exception.PhotoStorageException;
 import team.foodlog.backend.exception.RefreshTokenExpiredException;
@@ -102,6 +103,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 + "Check the Content-Type header and boundary parameter.";
 
         logError(message, request, e);
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
+    @ExceptionHandler(InvalidPhotoException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPhoto(
+            InvalidPhotoException e, HttpServletRequest request
+    ) {
+        String message = "Invalid photo";
+
+        logWarn(message, request, e);
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
