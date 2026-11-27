@@ -10,11 +10,17 @@ import team.foodlog.backend.service.nutrition.provider.FoodValidator;
 @Component
 public class UsdaFoodValidator implements FoodValidator<UsdaFood> {
 
-    private static final Set<String> REQUIRED_NUTRIENTS = Set.of(
-            "Energy",
-            "Carbohydrate, by difference",
-            "Protein",
-            "Total lipid (fat)"
+    private static final Set<Long> ENERGY_NUTRIENTS_IDS = Set.of(
+            1008L, // kcal
+            2048L, // Atwater Specific
+            2047L, // Atwater General
+            1062L // kJ
+    );
+
+    private static final Set<Long> REQUIRED_MACROS_IDS = Set.of(
+            1005L, // carbs
+            1003L, // protein
+            1004L // fat
     );
 
     @Override
@@ -27,18 +33,26 @@ public class UsdaFoodValidator implements FoodValidator<UsdaFood> {
             return false;
         }
 
-        Map<String, BigDecimal> nutrients = food.nutrients().stream()
-                .filter(nutrient -> nutrient.name() != null && nutrient.value() != null)
+        Map<Long, BigDecimal> nutrients = food.nutrients().stream()
+                .filter(nutrient -> nutrient.id() != null && nutrient.value() != null)
                 .collect(Collectors.toMap(
-                        UsdaNutrient::name,
+                        UsdaNutrient::id,
                         UsdaNutrient::value,
                         (first, second) -> first
                 ));
 
-        return REQUIRED_NUTRIENTS.stream()
-                .allMatch(name -> {
-                    BigDecimal value = nutrients.get(name);
-                    return value != null && value.signum() >= 0;
-                });
+        return hasValidNutrients(nutrients);
+    }
+
+    private boolean hasValidNutrients(Map<Long, BigDecimal> nutrients) {
+        return ENERGY_NUTRIENTS_IDS.stream()
+                .anyMatch(id -> isValidNutrient(nutrients, id))
+                && REQUIRED_MACROS_IDS.stream()
+                .allMatch(id -> isValidNutrient(nutrients, id));
+    }
+
+    private boolean isValidNutrient(Map<Long, BigDecimal> nutrients, Long id) {
+        BigDecimal value = nutrients.get(id);
+        return value != null && value.signum() >= 0;
     }
 }
