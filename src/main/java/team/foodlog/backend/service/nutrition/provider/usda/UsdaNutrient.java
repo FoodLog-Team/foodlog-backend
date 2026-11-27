@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
 public record UsdaNutrient(
-        @JsonProperty("nutrientName") String name,
+        @JsonProperty("nutrientId") Long id,
         BigDecimal value
-) {
-}
+) {}
