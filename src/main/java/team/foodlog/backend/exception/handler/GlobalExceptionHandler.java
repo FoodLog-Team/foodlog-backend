@@ -22,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import team.foodlog.backend.exception.EmailAlreadyRegisteredException;
 import team.foodlog.backend.exception.EntityNotFoundException;
@@ -93,6 +94,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "Revoked refresh token reuse detected");
     }
 
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ErrorResponse> handleMultipart(
+            MultipartException e, HttpServletRequest request
+    ) {
+        String message = "Malformed multipart request. "
+                + "Check the Content-Type header and boundary parameter.";
+
+        logError(message, request, e);
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFound(
             EntityNotFoundException e, HttpServletRequest request
@@ -119,7 +131,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         String message = "Photo operation failed";
 
-        logWarn(message, request, e);
+        logError(message, request, e);
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 
@@ -203,12 +215,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             Exception e, HttpServletRequest request
     ) {
 
-        log.error("Unhandled exception: type={}, method={}, uri={}",
-                e.getClass().getSimpleName(),
-                request.getMethod(),
-                request.getRequestURI(),
-                e
-        );
+        logError("Unhandled exception", request, e);
 
         return buildResponse(
             HttpStatus.INTERNAL_SERVER_ERROR,
@@ -233,6 +240,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 request.getMethod(),
                 request.getRequestURI(),
                 e.getClass().getSimpleName()
+        );
+    }
+
+    private void logError(String message, HttpServletRequest request, Exception e) {
+        log.error("{}: type={}, method={}, uri={}",
+                message,
+                e.getClass().getSimpleName(),
+                request.getMethod(),
+                request.getRequestURI(),
+                e
         );
     }
 
